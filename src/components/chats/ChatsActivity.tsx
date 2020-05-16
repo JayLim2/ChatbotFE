@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
-import LoginForm from "./LoginForm";
+import React, {Component, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {
     Container, Header, Title,
     Content, Footer, FooterTab,
     Button, Left, Right,
     Body, Icon, Text
 } from 'native-base';
-import * as Font from "expo-font";
-import {Ionicons} from "@expo/vector-icons";
+import * as Font from 'expo-font';
+import {Ionicons} from '@expo/vector-icons';
 import {AppLoading} from "expo";
+import {Input} from 'react-native-elements';
+import {MaterialIndicator} from 'react-native-indicators';
+
+import ErrorMessage from "../utils/ErrorMessage";
+import SuccessMessage from "../utils/SuccessMessage";
+import ChatsList from "./ChatsList";
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -18,7 +24,7 @@ const fetchFonts = () => {
     });
 }
 
-const LoginActivity = ({navigation}) => {
+const ChatsActivity = ({navigation}) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -39,22 +45,15 @@ const LoginActivity = ({navigation}) => {
                     </Button>
                 </Left>
                 <Body>
-                    <Title>Login</Title>
+                    <Title>Home</Title>
                 </Body>
                 <Right />
             </Header>
-            <Content>
-                <LoginForm navigation={navigation}/>
+            <Content contentContainerStyle={{flexGrow: 1}}>
+                <ChatsList navigation={navigation}/>
             </Content>
-            {/*<Footer>*/}
-            {/*    <FooterTab>*/}
-            {/*        <Button full>*/}
-            {/*            <Text>Footer</Text>*/}
-            {/*        </Button>*/}
-            {/*    </FooterTab>*/}
-            {/*</Footer>*/}
         </Container>
-    );
+    )
 }
 
-export default LoginActivity;
+export default ChatsActivity;

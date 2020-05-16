@@ -11,6 +11,7 @@ import ErrorMessage from "../utils/ErrorMessage";
 import SuccessMessage from "../utils/SuccessMessage";
 
 import {
+    AUTHENTICATED_SUCCESSFUL,
     INVALID_CREDENTIALS, LOGIN,
     LOGIN_BUTTON,
     LOGIN_INPUT_LABEL,
@@ -137,7 +138,7 @@ class LoginForm extends Component<any, any> {
             <MaterialIndicator color='indigo' /> : null;
 
         const message = authenticated ?
-            <SuccessMessage message={INVALID_CREDENTIALS}/> :
+            <SuccessMessage message={AUTHENTICATED_SUCCESSFUL}/> :
             <ErrorMessage message={INVALID_CREDENTIALS}/>;
 
         return (
