@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {HELLO_WORLD} from "../configuration/Constants";
 import StatefulComponent from "./StatefulComponent";
 import {
@@ -7,6 +7,9 @@ import {
     Button, Left, Right,
     Body, Icon, Text
 } from 'native-base';
+import * as Font from "expo-font";
+import {Ionicons} from "@expo/vector-icons";
+import {AppLoading} from "expo";
 
 const textContentStyles = {
     marginTop:25,
@@ -15,7 +18,26 @@ const textContentStyles = {
     marginRight:15
 }
 
+const fetchFonts = () => {
+    return Font.loadAsync({
+        'Roboto': require('native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+        ...Ionicons.font,
+    });
+}
+
 const HelloWorld = () => {
+
+    const [loading, setLoading] = useState(true);
+
+    if(loading) {
+        return <AppLoading
+            startAsync={fetchFonts}
+            onFinish={() => setLoading(false)}
+            onError={e => console.error("Hello nigga")}
+        />;
+    }
+
     return (
         <Container>
             <Header>

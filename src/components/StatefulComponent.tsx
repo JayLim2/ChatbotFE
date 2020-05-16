@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {CHANGE_BUTTON_TEXT} from "../configuration/Constants";
-import {Text, Button} from 'native-base';
+import {Text, Button, Root} from 'native-base';
 import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
+import {AppLoading} from "expo";
 
 class StatefulComponent extends Component<any, any> {
 
@@ -15,17 +16,15 @@ class StatefulComponent extends Component<any, any> {
             loading: true
         }
         this.onPress = this.onPress.bind(this);
+        this.fetchFonts = this.fetchFonts.bind(this);
     }
 
-    async componentDidMount() {
-        await Font.loadAsync({
+    fetchFonts() {
+        return Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
             ...Ionicons.font,
-        })
-        this.setState({
-            loading: false
-        })
+        });
     }
 
     onPress() {
@@ -38,8 +37,12 @@ class StatefulComponent extends Component<any, any> {
     }
 
     render() {
-        if(this.state.loading) {
-            return <View/>;
+        if (this.state.loading) {
+            return <AppLoading
+                startAsync={this.fetchFonts}
+                onFinish={() => this.setState({loading: false})}
+                onError={e => console.error("Hello nigga")}
+            />;
         }
 
         const {message} = this.state;
