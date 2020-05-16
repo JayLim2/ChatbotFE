@@ -38,7 +38,7 @@ const ChatsActivity = ({navigation}) => {
 
     return (
         <Container>
-            <Header>
+            <Header style={{backgroundColor:"indigo"}} androidStatusBarColor={"indigo"}>
                 <Left>
                     <Button transparent>
                         <Icon name='menu' />

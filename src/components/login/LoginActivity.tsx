@@ -32,7 +32,7 @@ const LoginActivity = ({navigation}) => {
 
     return (
         <Container>
-            <Header>
+            <Header style={{backgroundColor:"indigo"}} androidStatusBarColor={"indigo"}>
                 <Left>
                     <Button transparent>
                         <Icon name='menu' />
@@ -46,13 +46,6 @@ const LoginActivity = ({navigation}) => {
             <Content>
                 <LoginForm navigation={navigation}/>
             </Content>
-            {/*<Footer>*/}
-            {/*    <FooterTab>*/}
-            {/*        <Button full>*/}
-            {/*            <Text>Footer</Text>*/}
-            {/*        </Button>*/}
-            {/*    </FooterTab>*/}
-            {/*</Footer>*/}
         </Container>
     );
 }

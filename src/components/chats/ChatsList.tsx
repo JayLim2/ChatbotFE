@@ -47,7 +47,7 @@ class ChatsList extends Component<any, any>{
                     active={this.state.active}
                     direction="up"
                     containerStyle={{}}
-                    style={{backgroundColor: '#5067FF'}}
+                    style={{backgroundColor: 'indigo'}}
                     position="bottomRight"
                     onPress={this.onOpenChatClick}
                 >

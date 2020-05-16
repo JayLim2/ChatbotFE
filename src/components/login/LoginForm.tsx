@@ -166,7 +166,7 @@ class LoginForm extends Component<any, any> {
                                }}
                                onChangeText={this.onInputPassword}
                         />
-                        <Button primary full onPress={this.onLogin}>
+                        <Button full onPress={this.onLogin} style={{backgroundColor:"indigo"}}>
                             <Text>{LOGIN_BUTTON}</Text>
                         </Button>
                     </View>
