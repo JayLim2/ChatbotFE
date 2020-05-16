@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {HELLO_WORLD} from "../configuration/Constants";
-import StatefulComponent from "./StatefulComponent";
+import LoginForm from "./LoginForm";
 import {
     Container, Header, Title,
     Content, Footer, FooterTab,
@@ -11,13 +10,6 @@ import * as Font from "expo-font";
 import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
 
-const textContentStyles = {
-    marginTop:25,
-    marginLeft:15,
-    marginBottom:0,
-    marginRight:15
-}
-
 const fetchFonts = () => {
     return Font.loadAsync({
         'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -26,7 +18,7 @@ const fetchFonts = () => {
     });
 }
 
-const HelloWorld = () => {
+const LoginActivity = ({navigation}) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -52,23 +44,17 @@ const HelloWorld = () => {
                 <Right />
             </Header>
             <Content>
-                <Text style={textContentStyles}>
-                    TEST NEW COMPONENT
-                </Text>
-                <Text style={textContentStyles}>
-                    {HELLO_WORLD}
-                </Text>
-                <StatefulComponent/>
+                <LoginForm navigation={navigation}/>
             </Content>
-            <Footer>
-                <FooterTab>
-                    <Button full>
-                        <Text>Footer</Text>
-                    </Button>
-                </FooterTab>
-            </Footer>
+            {/*<Footer>*/}
+            {/*    <FooterTab>*/}
+            {/*        <Button full>*/}
+            {/*            <Text>Footer</Text>*/}
+            {/*        </Button>*/}
+            {/*    </FooterTab>*/}
+            {/*</Footer>*/}
         </Container>
     );
 }
 
-export default HelloWorld;
+export default LoginActivity;
