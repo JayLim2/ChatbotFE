@@ -27,7 +27,7 @@ class ChatsList extends Component<any, any>{
     }
 
     onOpenChatClick() {
-        alert("Coming soon.");
+        this.props.navigation.navigate("CurrentChat");
     }
 
     render(): React.ReactNode {

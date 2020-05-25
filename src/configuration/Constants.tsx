@@ -15,3 +15,4 @@ export const AUTHENTICATED_SUCCESSFUL = "Please wait...";
 
 //Chats
 export const MAIN_CHATS_PAGE_TEXT = "Click on button in right bottom corner to open chat.";
+export const MESSAGE_INPUT_PLACEHOLDER = "Input message";

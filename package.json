@@ -24,7 +24,10 @@
     "react-native-router-flux": "4.2.0",
     "react-native-safe-area-context": "1.0.0",
     "react-native-gesture-handler": "1.6.1",
-    "react-native-reanimated": "1.8.0"
+    "react-native-reanimated": "1.8.0",
+    "i18next": "19.4.4",
+    "react-i18next": "11.4.0",
+    "react-native-localize": "1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
