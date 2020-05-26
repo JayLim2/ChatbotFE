@@ -9,6 +9,7 @@ import {
 import * as Font from "expo-font";
 import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
+import {SETTINGS_ACTIVITY} from "../../configuration/Constants";
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -30,18 +31,21 @@ const LoginActivity = ({navigation}) => {
         />;
     }
 
+    const onClickMenu = () => {
+        navigation.navigate(SETTINGS_ACTIVITY);
+    }
+
     return (
         <Container>
             <Header style={{backgroundColor:"indigo"}} androidStatusBarColor={"indigo"}>
-                <Left>
-                    <Button transparent>
-                        <Icon name='menu' />
-                    </Button>
-                </Left>
                 <Body>
                     <Title>Login</Title>
                 </Body>
-                <Right />
+                <Right>
+                    <Button transparent onPress={onClickMenu}>
+                        <Icon name='settings'/>
+                    </Button>
+                </Right>
             </Header>
             <Content contentContainerStyle={{flexGrow: 1}}>
                 <LoginForm navigation={navigation}/>

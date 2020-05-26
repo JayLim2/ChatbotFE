@@ -10,10 +10,9 @@ import {MaterialIndicator} from 'react-native-indicators';
 
 import ErrorMessage from "../utils/ErrorMessage";
 import SuccessMessage from "../utils/SuccessMessage";
-import Orientation from "../utils/Orientation";
 
 import {
-    AUTHENTICATED_SUCCESSFUL,
+    AUTHENTICATED_SUCCESSFUL, HOME_ACTIVITY,
     INVALID_CREDENTIALS, LOGIN,
     LOGIN_BUTTON,
     LOGIN_INPUT_LABEL,
@@ -73,7 +72,7 @@ class LoginForm extends Component<any, any> {
                 })
 
                 if(credentialsAreValid) {
-                    this.props.navigation.navigate("ChatsList");
+                    this.props.navigation.navigate(HOME_ACTIVITY);
                 }
             },
             1500

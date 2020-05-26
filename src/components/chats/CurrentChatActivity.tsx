@@ -5,7 +5,7 @@ import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Tit
 import * as Font from "expo-font";
 import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
-import {MESSAGE_INPUT_PLACEHOLDER} from "../../configuration/Constants";
+import {MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 
@@ -44,6 +44,9 @@ class CurrentChatActivity extends Component<any, any> {
         this.onInputMessage = this.onInputMessage.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         this.createMessage = this.createMessage.bind(this);
+
+        this.onClickMenu = this.onClickMenu.bind(this);
+        this.onReturnBack = this.onReturnBack.bind(this);
     }
 
     fetchFonts() {
@@ -93,6 +96,14 @@ class CurrentChatActivity extends Component<any, any> {
         return messageObj;
     }
 
+    onClickMenu() {
+        this.props.navigation.navigate(SETTINGS_ACTIVITY);
+    }
+
+    onReturnBack() {
+        this.props.navigation.goBack();
+    }
+
     render() {
         if (this.state.loading) {
             return <AppLoading
@@ -109,14 +120,18 @@ class CurrentChatActivity extends Component<any, any> {
             <Container>
                 <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
                     <Left>
-                        <Button transparent>
-                            <Icon name='menu'/>
+                        <Button transparent onPress={this.onReturnBack}>
+                            <Icon name='arrow-back'/>
                         </Button>
                     </Left>
                     <Body>
                         <Title>Chat</Title>
                     </Body>
-                    <Right/>
+                    <Right>
+                        <Button transparent onPress={this.onClickMenu}>
+                            <Icon name='settings'/>
+                        </Button>
+                    </Right>
                 </Header>
                 <Content>
                     <CurrentChat messages={messages} navigation={navigation}/>

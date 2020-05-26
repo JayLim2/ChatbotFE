@@ -1,20 +1,10 @@
-import React, {Component, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {
-    Container, Header, Title,
-    Content, Footer, FooterTab,
-    Button, Left, Right,
-    Body, Icon, Text
-} from 'native-base';
+import React, {useState} from 'react';
+import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from 'native-base';
 import * as Font from 'expo-font';
 import {Ionicons} from '@expo/vector-icons';
 import {AppLoading} from "expo";
-import {Input} from 'react-native-elements';
-import {MaterialIndicator} from 'react-native-indicators';
-
-import ErrorMessage from "../utils/ErrorMessage";
-import SuccessMessage from "../utils/SuccessMessage";
 import ChatsList from "./ChatsList";
+import {SETTINGS_ACTIVITY} from "../../configuration/Constants";
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -28,7 +18,7 @@ const ChatsActivity = ({navigation}) => {
 
     const [loading, setLoading] = useState(true);
 
-    if(loading) {
+    if (loading) {
         return <AppLoading
             startAsync={fetchFonts}
             onFinish={() => setLoading(false)}
@@ -36,18 +26,21 @@ const ChatsActivity = ({navigation}) => {
         />;
     }
 
+    const onClickMenu = () => {
+        navigation.navigate(SETTINGS_ACTIVITY);
+    }
+
     return (
         <Container>
-            <Header style={{backgroundColor:"indigo"}} androidStatusBarColor={"indigo"}>
-                <Left>
-                    <Button transparent>
-                        <Icon name='menu' />
-                    </Button>
-                </Left>
+            <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
                 <Body>
                     <Title>Home</Title>
                 </Body>
-                <Right />
+                <Right>
+                    <Button transparent onPress={onClickMenu}>
+                        <Icon name='settings'/>
+                    </Button>
+                </Right>
             </Header>
             <Content contentContainerStyle={{flexGrow: 1}}>
                 <ChatsList navigation={navigation}/>

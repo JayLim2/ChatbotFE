@@ -16,3 +16,9 @@ export const AUTHENTICATED_SUCCESSFUL = "Please wait...";
 //Chats
 export const MAIN_CHATS_PAGE_TEXT = "Click on button in right bottom corner to open chat.";
 export const MESSAGE_INPUT_PLACEHOLDER = "Input message";
+
+//Routes names
+export const LOGIN_ACTIVITY = "Login";
+export const HOME_ACTIVITY = "Home";
+export const CURRENT_CHAT_ACTIVITY = "CurrentChat";
+export const SETTINGS_ACTIVITY = "Settings";

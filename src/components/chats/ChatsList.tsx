@@ -12,7 +12,7 @@ import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 
-import {MAIN_CHATS_PAGE_TEXT} from "../../configuration/Constants";
+import {CURRENT_CHAT_ACTIVITY, MAIN_CHATS_PAGE_TEXT} from "../../configuration/Constants";
 
 class ChatsList extends Component<any, any>{
 
@@ -25,7 +25,7 @@ class ChatsList extends Component<any, any>{
     }
 
     onOpenChatClick() {
-        this.props.navigation.navigate("CurrentChat");
+        this.props.navigation.navigate(CURRENT_CHAT_ACTIVITY);
     }
 
     render(): React.ReactNode {
