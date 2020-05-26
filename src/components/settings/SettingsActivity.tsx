@@ -15,6 +15,8 @@ class SettingsActivity extends Component<any, any> {
         }
         this.fetchFonts = this.fetchFonts.bind(this);
         this.onReturnBack = this.onReturnBack.bind(this);
+        this.onSelectEnglishLanguage = this.onSelectEnglishLanguage.bind(this);
+        this.onSelectRussianLanguage = this.onSelectRussianLanguage.bind(this);
     }
 
     fetchFonts() {
@@ -27,6 +29,14 @@ class SettingsActivity extends Component<any, any> {
 
     onReturnBack() {
         this.props.navigation.goBack();
+    }
+
+    onSelectEnglishLanguage() {
+        console.log("English");
+    }
+
+    onSelectRussianLanguage() {
+        console.log("Russian");
     }
 
     render(): React.ReactNode {
@@ -74,8 +84,12 @@ class SettingsActivity extends Component<any, any> {
                     <View style={styles.root}>
                         <Text style={styles.text}>Select language:</Text>
                         <View style={styles.languages}>
-                            <Image style={styles.languageIcon} source={RU_LANG} />
-                            <Image style={styles.languageIcon} source={EN_LANG} />
+                            <Button transparent onPress={this.onSelectRussianLanguage}>
+                                <Image style={styles.languageIcon} source={RU_LANG} />
+                            </Button>
+                            <Button transparent onPress={this.onSelectEnglishLanguage}>
+                                <Image style={styles.languageIcon} source={EN_LANG} />
+                            </Button>
                         </View>
                     </View>
                 </Content>
