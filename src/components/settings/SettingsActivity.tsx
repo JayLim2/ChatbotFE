@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {Text, View} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 import {Container, Header, Left, Body, Right, Content, Footer, Title, Icon, Button} from "native-base";
 import * as Font from "expo-font";
 import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
+import {EN_LANG, RU_LANG} from "../../configuration/Images";
 
 class SettingsActivity extends Component<any, any> {
 
@@ -37,6 +38,25 @@ class SettingsActivity extends Component<any, any> {
             />;
         }
 
+        const styles = StyleSheet.create({
+            root: {
+                padding: 20,
+                paddingTop: "5%",
+                alignItems: "center"
+            },
+            text: {
+                fontSize: 18
+            },
+            languages: {
+                flex: 1,
+                flexDirection: "row",
+                marginTop: 20
+            },
+            languageIcon: {
+                marginRight: 15
+            }
+        })
+
         return (
             <Container>
                 <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
@@ -48,10 +68,15 @@ class SettingsActivity extends Component<any, any> {
                     <Body>
                         <Title>Settings</Title>
                     </Body>
+                    <Right/>
                 </Header>
                 <Content contentContainerStyle={{flexGrow: 1}}>
-                    <View>
-                        <Text>Coming soon.</Text>
+                    <View style={styles.root}>
+                        <Text style={styles.text}>Select language:</Text>
+                        <View style={styles.languages}>
+                            <Image style={styles.languageIcon} source={RU_LANG} />
+                            <Image style={styles.languageIcon} source={EN_LANG} />
+                        </View>
                     </View>
                 </Content>
             </Container>
