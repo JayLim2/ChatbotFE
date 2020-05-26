@@ -12,8 +12,6 @@ import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 
-import ErrorMessage from "../utils/ErrorMessage";
-import SuccessMessage from "../utils/SuccessMessage";
 import {MAIN_CHATS_PAGE_TEXT} from "../../configuration/Constants";
 
 class ChatsList extends Component<any, any>{
@@ -35,7 +33,7 @@ class ChatsList extends Component<any, any>{
             <View style={{
                 height:"100%",
                 padding:20,
-                paddingTop:"50%"
+                paddingTop:100
             }}>
                 <Text style={{
                     fontSize: 18,

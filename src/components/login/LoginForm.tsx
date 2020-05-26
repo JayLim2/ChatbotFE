@@ -5,10 +5,12 @@ import * as Font from 'expo-font';
 import {Ionicons} from '@expo/vector-icons';
 import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
+import {Dimensions} from "react-native";
 import {MaterialIndicator} from 'react-native-indicators';
 
 import ErrorMessage from "../utils/ErrorMessage";
 import SuccessMessage from "../utils/SuccessMessage";
+import Orientation from "../utils/Orientation";
 
 import {
     AUTHENTICATED_SUCCESSFUL,
@@ -121,14 +123,14 @@ class LoginForm extends Component<any, any> {
             container: {
                 backgroundColor: '#fff',
                 width: "100%",
-                padding: 20
+                paddingLeft: 20,
+                paddingRight: 20
             },
             infoBlock: {
                 width: "100%",
                 textAlignVertical: "center",
                 justifyContent: "center",
-                padding:15,
-                height: 150,
+                padding: 15
             }
         });
 
@@ -164,6 +166,7 @@ class LoginForm extends Component<any, any> {
                                    type: 'font-awesome',
                                    name: 'lock'
                                }}
+                               secureTextEntry={true}
                                onChangeText={this.onInputPassword}
                         />
                         <Button full onPress={this.onLogin} style={{backgroundColor:"indigo"}}>

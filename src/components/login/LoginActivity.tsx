@@ -43,7 +43,7 @@ const LoginActivity = ({navigation}) => {
                 </Body>
                 <Right />
             </Header>
-            <Content>
+            <Content contentContainerStyle={{flexGrow: 1}}>
                 <LoginForm navigation={navigation}/>
             </Content>
         </Container>
