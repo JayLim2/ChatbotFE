@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import CurrentChat from "./CurrentChat";
 import {StyleSheet} from 'react-native';
 import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
-import * as Font from "expo-font";
-import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
 import {MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
+import {fetchFonts} from "../../configuration/Fonts";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -40,21 +39,12 @@ class CurrentChatActivity extends Component<any, any> {
             messages: [],
             currentMessage: ""
         }
-        this.fetchFonts = this.fetchFonts.bind(this);
         this.onInputMessage = this.onInputMessage.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         this.createMessage = this.createMessage.bind(this);
 
         this.onClickMenu = this.onClickMenu.bind(this);
         this.onReturnBack = this.onReturnBack.bind(this);
-    }
-
-    fetchFonts() {
-        return Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font,
-        });
     }
 
     onInputMessage(newMessage: string) {
@@ -107,7 +97,7 @@ class CurrentChatActivity extends Component<any, any> {
     render() {
         if (this.state.loading) {
             return <AppLoading
-                startAsync={this.fetchFonts}
+                startAsync={fetchFonts}
                 onFinish={() => this.setState({loading: false})}
                 onError={e => console.error(e)}
             />;

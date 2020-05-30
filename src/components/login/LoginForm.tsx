@@ -1,28 +1,27 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'native-base';
-import * as Font from 'expo-font';
-import {Ionicons} from '@expo/vector-icons';
 import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
-import {Dimensions} from "react-native";
 import {MaterialIndicator} from 'react-native-indicators';
 
 import ErrorMessage from "../utils/ErrorMessage";
 import SuccessMessage from "../utils/SuccessMessage";
 
 import {
-    AUTHENTICATED_SUCCESSFUL, HOME_ACTIVITY,
-    INVALID_CREDENTIALS, LOGIN,
+    AUTHENTICATED_SUCCESSFUL,
+    HOME_ACTIVITY,
+    INVALID_CREDENTIALS,
+    LOGIN,
     LOGIN_BUTTON,
     LOGIN_INPUT_LABEL,
-    LOGIN_INPUT_PLACEHOLDER, PASSWORD,
+    LOGIN_INPUT_PLACEHOLDER,
+    PASSWORD,
     PASSWORD_INPUT_LABEL,
     PASSWORD_INPUT_PLACEHOLDER
 } from "../../configuration/Constants";
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {fetchFonts} from "../../configuration/Fonts";
+import {tryLogin} from "../client/Client";
 
 class LoginForm extends Component<any, any> {
 
@@ -39,15 +38,6 @@ class LoginForm extends Component<any, any> {
         this.onLogin = this.onLogin.bind(this);
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
-        this.fetchFonts = this.fetchFonts.bind(this);
-    }
-
-    fetchFonts() {
-        return Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font,
-        });
     }
 
     onLogin() {
@@ -59,34 +49,37 @@ class LoginForm extends Component<any, any> {
         })
 
         //validate credentials
-        setTimeout(
-            () => {
-                let credentialsAreValid = false;
-                if(login && password) {
-                    credentialsAreValid = login === LOGIN && password === PASSWORD;
-                }
+        tryLogin(login, password)
+            .then(credentialsAreValid => {
                 this.setState({
                     authenticating: false,
                     authenticated: credentialsAreValid,
                     authenticationResponseReceived: true
                 })
 
-                if(credentialsAreValid) {
+                if (credentialsAreValid) { //if authenticated - open "Home" page
                     this.props.navigation.navigate(HOME_ACTIVITY);
                 }
-            },
-            1500
-        )
 
-        //hide messages
-        setTimeout(
-            () => {
+                //hide messages
+                let secondsCount = 4;
+                setTimeout(
+                    () => {
+                        this.setState({
+                            authenticationResponseReceived: false
+                        })
+                    },
+                    secondsCount * 1000
+                )
+            })
+            .catch(e => {
+                console.error("Error during authentication: ", e);
                 this.setState({
-                    authenticationResponseReceived: false
+                    authenticating: false,
+                    authenticated: false,
+                    authenticationResponseReceived: true
                 })
-            },
-            3500
-        )
+            })
     }
 
     // @ts-ignore
@@ -106,7 +99,7 @@ class LoginForm extends Component<any, any> {
     render() {
         if (this.state.loading) {
             return <AppLoading
-                startAsync={this.fetchFonts}
+                startAsync={fetchFonts}
                 onFinish={() => this.setState({loading: false})}
                 onError={e => console.error(e)}
             />;
@@ -136,7 +129,7 @@ class LoginForm extends Component<any, any> {
         const {authenticating, authenticationResponseReceived, authenticated} = this.state;
 
         const loader = authenticating ?
-            <MaterialIndicator color='indigo' /> : null;
+            <MaterialIndicator color='indigo'/> : null;
 
         const message = authenticated ?
             <SuccessMessage message={AUTHENTICATED_SUCCESSFUL}/> :
@@ -168,7 +161,7 @@ class LoginForm extends Component<any, any> {
                                secureTextEntry={true}
                                onChangeText={this.onInputPassword}
                         />
-                        <Button full onPress={this.onLogin} style={{backgroundColor:"indigo"}}>
+                        <Button full onPress={this.onLogin} style={{backgroundColor: "indigo"}}>
                             <Text>{LOGIN_BUTTON}</Text>
                         </Button>
                     </View>

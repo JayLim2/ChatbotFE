@@ -1,7 +1,5 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
-import * as Font from 'expo-font';
-import {Ionicons} from '@expo/vector-icons';
 import SystemMessage from "./messages/SystemMessage";
 import UserMessage from "./messages/UserMessage";
 import {ChatProps} from "./ChatProps";
@@ -10,15 +8,6 @@ class CurrentChat extends React.Component<any, any> {
 
     constructor(props: ChatProps) {
         super(props);
-        this.fetchFonts = this.fetchFonts.bind(this);
-    }
-
-    fetchFonts() {
-        return Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font,
-        });
     }
 
     render(): React.ReactNode {

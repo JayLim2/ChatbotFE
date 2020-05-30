@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
 import {Container, Header, Left, Body, Right, Content, Footer, Title, Icon, Button} from "native-base";
-import * as Font from "expo-font";
-import {Ionicons} from "@expo/vector-icons";
 import {AppLoading} from "expo";
 import {EN_LANG, RU_LANG} from "../../configuration/Images";
+import {fetchFonts} from "../../configuration/Fonts";
 
 class SettingsActivity extends Component<any, any> {
 
@@ -13,18 +12,9 @@ class SettingsActivity extends Component<any, any> {
         this.state = {
             loading: true
         }
-        this.fetchFonts = this.fetchFonts.bind(this);
         this.onReturnBack = this.onReturnBack.bind(this);
         this.onSelectEnglishLanguage = this.onSelectEnglishLanguage.bind(this);
         this.onSelectRussianLanguage = this.onSelectRussianLanguage.bind(this);
-    }
-
-    fetchFonts() {
-        return Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font,
-        });
     }
 
     onReturnBack() {
@@ -42,7 +32,7 @@ class SettingsActivity extends Component<any, any> {
     render(): React.ReactNode {
         if (this.state.loading) {
             return <AppLoading
-                startAsync={this.fetchFonts}
+                startAsync={fetchFonts}
                 onFinish={() => this.setState({loading: false})}
                 onError={e => console.error(e)}
             />;
