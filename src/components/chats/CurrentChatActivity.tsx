@@ -7,6 +7,8 @@ import {MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
+import {getAllMessages, saveAllMessages, saveMessage} from "../client/Client";
+import {resume} from "expo/build/AR";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -34,64 +36,137 @@ class CurrentChatActivity extends Component<any, any> {
 
     constructor(props: object) {
         super(props);
+
+        //create state
         this.state = {
             loading: true,
             messages: [],
             currentMessage: ""
         }
+
+        //events handler
+        this.onLoadMessages = this.onLoadMessages.bind(this);
         this.onInputMessage = this.onInputMessage.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
-        this.createMessage = this.createMessage.bind(this);
-
         this.onClickMenu = this.onClickMenu.bind(this);
         this.onReturnBack = this.onReturnBack.bind(this);
+
+        //other methods
+        this.createMessage = this.createMessage.bind(this);
+        this.getTestAnswer = this.getTestAnswer.bind(this);
+
+        //fetch messages
+        this.onLoadMessages();
     }
 
+
+    /**
+     * Load all messages
+     */
+    onLoadMessages() {
+        getAllMessages()
+            .then(result => {
+                let messages: MessageProps[] = result;
+                this.setState({
+                    messages: messages
+                })
+            })
+    }
+
+    /**
+     * Handler for changing input field "Message"
+     * @param newMessage
+     */
     onInputMessage(newMessage: string) {
         this.setState({
             currentMessage: newMessage
         })
     }
 
+    /**
+     * Handler for click on button "Send message"
+     */
     onSendMessage() {
         const messages = this.state.messages;
         const currentMessage = this.state.currentMessage;
-        this.setState({
-            messages: [
-                ...messages,
-                this.createMessage(
-                    currentMessage,
-                    "Sergei Komarov",
-                    {},
-                    "USER"
-                ),
-                this.createMessage(
-                    "Kill all humans",
-                    "Skynet",
-                    {},
-                    "SYSTEM"
-                )
-            ],
-            currentMessage: ""
-        })
+        let userMessage = this.createMessage(
+            currentMessage,
+            "USER",
+            "31.05.2020 16:00"
+        );
+        let systemMessage = this.createMessage(
+            this.getTestAnswer(userMessage),
+            "SYSTEM",
+            "31.05.2020 16:01"
+        );
+        //TODO insert here sending onto server
+        saveAllMessages([userMessage, systemMessage])
+            .then(result => {
+                //result - error message or JsonArray with messages ids
+                this.setState({
+                    messages: [...messages, userMessage, systemMessage],
+                    currentMessage: ""
+                })
+            })
+        //------------------------------------
     }
 
-    createMessage(message: string, username: string, date: object, type: string) {
+    /**
+     * Wrap message data by MessageProps object
+     * @param message
+     * @param userId
+     * @param date
+     */
+    createMessage(message: string, userId: string, date: string) {
         let messageObj: MessageProps = {
             message: message,
-            username: username,
-            date: date,
-            type: type
+            userId: userId,
+            date: date
         };
         return messageObj;
     }
 
+    /**
+     * Handler for click on "Settings" button
+     */
     onClickMenu() {
         this.props.navigation.navigate(SETTINGS_ACTIVITY);
     }
 
+    /**
+     * Handler for click on "Back" button
+     */
     onReturnBack() {
         this.props.navigation.goBack();
+    }
+
+    /**
+     * Get hardcoded message by user message text
+     * @param userMessage
+     */
+    getTestAnswer(userMessage: MessageProps) {
+        let message = userMessage.message;
+        if(message) {
+            message = message.trim().toLowerCase();
+        }
+        let answer;
+        switch (message) {
+            case "hello":
+                answer = "Hello, " + userMessage.userId;
+                break;
+            case "hi":
+                answer = "Hi, bro :)";
+                break;
+            case "it's good weather today":
+                answer = "But I don't like...";
+                break;
+            case "bye":
+                answer = "See you later!";
+                break;
+            default:
+                answer = "Kill. All. Humans.";
+        }
+        return answer;
     }
 
     render() {

@@ -1,13 +1,22 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {EmitterSubscription, Keyboard, ScrollView} from 'react-native';
 import SystemMessage from "./messages/SystemMessage";
 import UserMessage from "./messages/UserMessage";
 import {ChatProps} from "./ChatProps";
 
 class CurrentChat extends React.Component<any, any> {
 
+    //References to components
+    private scrollView: ScrollView | null = null;
+
     constructor(props: ChatProps) {
         super(props);
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.scrollView?.scrollToEnd({animated:true});
+        }, 50);
     }
 
     render(): React.ReactNode {
@@ -17,15 +26,26 @@ class CurrentChat extends React.Component<any, any> {
             let k: number = 0;
             for (const message of messages) {
                 messagesItems.push(
-                    message.type === "SYSTEM" ?
-                        <SystemMessage key={++k} message={message.message} date={message.date} username={message.username} /> :
-                        <UserMessage key={++k} message={message.message} date={message.date} username={message.username} />
+                    message.userId !== "USER" ?
+                        <SystemMessage key={++k}
+                                       message={message.message}
+                                       date={message.date}
+                                       userId={message.userId}
+                        /> :
+                        <UserMessage key={++k}
+                                     message={message.message}
+                                     date={message.date}
+                                     userId={message.userId}
+                        />
                 );
             }
         }
 
         return (
-            <ScrollView style={{paddingTop: 10}}>
+            <ScrollView
+                ref={ref => this.scrollView = ref}
+                style={{paddingTop: 10}}
+            >
                 {messagesItems}
             </ScrollView>
         );

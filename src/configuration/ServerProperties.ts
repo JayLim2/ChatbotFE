@@ -1,4 +1,4 @@
-const HOST = "192.168.1.36";
+const HOST = "192.168.1.5";
 const PORT = 8080;
 
 //Server links

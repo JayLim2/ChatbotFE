@@ -1,7 +1,7 @@
 
 export interface MessageProps {
+    id?: number,
     message: string,
-    username: string,
-    date: object,
-    type?: string
+    userId: string,
+    date: string
 }

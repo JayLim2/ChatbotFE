@@ -27,7 +27,6 @@ export const tryLogin = (login: string, password: string) => {
     }).then(isAuthenticated => {
         return isAuthenticated;
     }).catch(e => {
-        console.error("ERROR");
         return false;
     });
 }
@@ -43,16 +42,14 @@ export const getAllMessages = () => {
     ).then(response => {
         return response.json();
     }).then(messagesJson => {
-        console.log(messagesJson);
         return messagesJson;
     }).catch(e => {
-        console.error("ERROR");
         return [];
     });
 }
 
 export const saveMessage = (message: MessageProps) => {
-    let url = `${MESSAGES_API_LINK}/get/all`;
+    let url = `${MESSAGES_API_LINK}/save`;
 
     return fetch(
         url,
@@ -72,7 +69,31 @@ export const saveMessage = (message: MessageProps) => {
     }).then(serverMessage => {
         return serverMessage;
     }).catch(e => {
-        console.error("Error during saving message: ", e);
+        return "CLIENT_FAIL";
+    });
+}
+
+export const saveAllMessages = (messages: MessageProps[]) => {
+    let url = `${MESSAGES_API_LINK}/save/all`;
+
+    return fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(messages)
+        }
+    ).then(response => {
+        if(response.status !== 200) {
+            throw new Error("HTTP ERROR: " + response.status);
+        }
+        return response.json();
+    }).then(serverMessage => {
+        return serverMessage;
+    }).catch(e => {
         return "CLIENT_FAIL";
     });
 }
