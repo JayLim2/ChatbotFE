@@ -1,4 +1,4 @@
-const HOST = "192.168.1.5";
+const HOST = "192.168.1.36"; //TODO replace it to your local machine IP
 const PORT = 8080;
 
 //Server links

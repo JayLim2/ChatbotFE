@@ -1,21 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'native-base';
-import {AppLoading} from "expo";
 import ChatsList from "./ChatsList";
 import {SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
 
 const ChatsActivity = ({navigation}) => {
 
-    const [loading, setLoading] = useState(true);
+    //##################### INITIALIZE ##########################
+    const [isLoadingComplete, setLoadingComplete] = useState(false);
 
-    if (loading) {
-        return <AppLoading
-            startAsync={fetchFonts}
-            onFinish={() => setLoading(false)}
-            onError={e => console.error(e)}
-        />;
+    const init = async () => {
+        try {
+            await fetchFonts();
+        } catch (e) {
+            console.warn(e);
+        } finally {
+            setLoadingComplete(true);
+        }
     }
+
+    useEffect(() => {
+        init();
+    }, []);
+
+    if (!isLoadingComplete) {
+        return null;
+    }
+    //----------------------------------------------------
 
     const onClickMenu = () => {
         navigation.navigate(SETTINGS_ACTIVITY);

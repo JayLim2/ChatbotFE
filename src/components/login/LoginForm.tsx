@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'native-base';
-import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 
@@ -26,16 +25,28 @@ class LoginForm extends Component<any, any> {
     constructor({props}: { props: any }) {
         super(props);
         this.state = {
-            loading: true,
+            isLoadingComplete: false,
             login: "",
             password: "",
             authenticating: false,
             authenticationResponseReceived: false,
-            authenticated: false
+            authenticated: false,
         }
         this.onLogin = this.onLogin.bind(this);
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
+    }
+
+    async componentDidMount() {
+        try {
+            await fetchFonts();
+        } catch (e) {
+            console.warn(e);
+        } finally {
+            this.setState({
+                isLoadingComplete: true
+            });
+        }
     }
 
     onLogin() {
@@ -95,12 +106,8 @@ class LoginForm extends Component<any, any> {
     }
 
     render() {
-        if (this.state.loading) {
-            return <AppLoading
-                startAsync={fetchFonts}
-                onFinish={() => this.setState({loading: false})}
-                onError={e => console.error(e)}
-            />;
+        if (!this.state.isLoadingComplete) {
+            return null;
         }
 
         const styles = StyleSheet.create({

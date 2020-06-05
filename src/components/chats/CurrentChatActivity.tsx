@@ -7,8 +7,9 @@ import {MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
-import {getAllMessages, saveAllMessages, saveMessage} from "../client/Client";
-import {resume} from "expo/build/AR";
+import {getAllMessages, saveAllMessages} from "../client/Client";
+import {openDatabase} from "../../configuration/DatabaseProperties";
+import * as SQLite from "expo-sqlite";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -28,18 +29,24 @@ class CurrentChatActivity extends Component<any, any> {
         },
         sendButton: {
             backgroundColor: "indigo",
-            padding:5,
+            padding: 5,
             borderBottomStartRadius: 10,
             borderBottomEndRadius: 10
         }
     });
 
+    //database instance
+    databaseInstance: SQLite.WebSQLDatabase;
+
     constructor(props: object) {
         super(props);
 
+        //open database
+        this.databaseInstance = openDatabase();
+
         //create state
         this.state = {
-            loading: true,
+            isLoadingComplete: false,
             messages: [],
             currentMessage: ""
         }
@@ -59,17 +66,36 @@ class CurrentChatActivity extends Component<any, any> {
         this.onLoadMessages();
     }
 
+    async componentDidMount() {
+        try {
+            await fetchFonts();
+        } catch (e) {
+            console.warn(e);
+        } finally {
+            this.setState({
+                isLoadingComplete: true
+            });
+        }
+    }
 
     /**
      * Load all messages
      */
     onLoadMessages() {
         getAllMessages()
-            .then(result => {
+            .then(result => { //if no problems with network
                 let messages: MessageProps[] = result;
                 this.setState({
                     messages: messages
                 })
+            })
+            .catch(e => { //if any problems with network
+                //TODO select from DB
+                this.databaseInstance.readTransaction(
+                    (transaction) => {
+                        transaction.executeSql("SELECT * FROM messages");
+                    }
+                )
             })
     }
 
@@ -146,7 +172,7 @@ class CurrentChatActivity extends Component<any, any> {
      */
     getTestAnswer(userMessage: MessageProps) {
         let message = userMessage.message;
-        if(message) {
+        if (message) {
             message = message.trim().toLowerCase();
         }
         let answer;
@@ -170,12 +196,8 @@ class CurrentChatActivity extends Component<any, any> {
     }
 
     render() {
-        if (this.state.loading) {
-            return <AppLoading
-                startAsync={fetchFonts}
-                onFinish={() => this.setState({loading: false})}
-                onError={e => console.error(e)}
-            />;
+        if (!this.state.isLoadingComplete) {
+            return null;
         }
 
         const {messages} = this.state;
@@ -210,7 +232,7 @@ class CurrentChatActivity extends Component<any, any> {
                     </View>
                     <View style={CurrentChatActivity.styles.footerSend}>
                         <Button style={CurrentChatActivity.styles.sendButton} onPress={this.onSendMessage}>
-                            <Icon type="MaterialCommunityIcons" name="send" />
+                            <Icon type="MaterialCommunityIcons" name="send"/>
                         </Button>
                     </View>
                 </Footer>

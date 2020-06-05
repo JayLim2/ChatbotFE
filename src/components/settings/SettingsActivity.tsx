@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
-import {Container, Header, Left, Body, Right, Content, Footer, Title, Icon, Button} from "native-base";
-import {AppLoading} from "expo";
-import {EN_LANG, RU_LANG} from "../../configuration/Images";
+import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from "native-base";
+import {EN_LANG, RU_LANG} from "../../configuration/files/Images";
 import {fetchFonts} from "../../configuration/Fonts";
 
 class SettingsActivity extends Component<any, any> {
@@ -10,11 +9,23 @@ class SettingsActivity extends Component<any, any> {
     constructor(props: object) {
         super(props);
         this.state = {
-            loading: true
+            isLoadingComplete: false,
         }
         this.onReturnBack = this.onReturnBack.bind(this);
         this.onSelectEnglishLanguage = this.onSelectEnglishLanguage.bind(this);
         this.onSelectRussianLanguage = this.onSelectRussianLanguage.bind(this);
+    }
+
+    async componentDidMount() {
+        try {
+            await fetchFonts();
+        } catch (e) {
+            console.warn(e);
+        } finally {
+            this.setState({
+                isLoadingComplete: true
+            });
+        }
     }
 
     onReturnBack() {
@@ -30,12 +41,8 @@ class SettingsActivity extends Component<any, any> {
     }
 
     render(): React.ReactNode {
-        if (this.state.loading) {
-            return <AppLoading
-                startAsync={fetchFonts}
-                onFinish={() => this.setState({loading: false})}
-                onError={e => console.error(e)}
-            />;
+        if (!this.state.isLoadingComplete) {
+            return null;
         }
 
         const styles = StyleSheet.create({

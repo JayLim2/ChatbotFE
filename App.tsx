@@ -1,9 +1,7 @@
 import React from 'react';
-
 //Navigation between activities
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 //Custom components
 import LoginActivity from "./src/components/login/LoginActivity";
 import ChatsActivity from "./src/components/chats/ChatsActivity";

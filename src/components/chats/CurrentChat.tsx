@@ -1,5 +1,5 @@
 import React from 'react';
-import {EmitterSubscription, Keyboard, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 import SystemMessage from "./messages/SystemMessage";
 import UserMessage from "./messages/UserMessage";
 import {ChatProps} from "./ChatProps";

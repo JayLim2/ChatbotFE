@@ -21,7 +21,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "chatbot-ios"
+    },
+    "android": {
+      "package": "chatbot-android"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
