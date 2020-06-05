@@ -6,6 +6,7 @@
  */
 import {MESSAGES_API_LINK, USERS_API_LINK} from "../../configuration/ServerProperties";
 import {MessageProps} from "../chats/messages/MessageProps";
+import {NO_CONNECTION} from "../../configuration/Constants";
 
 export const tryLogin = (login: string, password: string) => {
     //Put data into form
@@ -27,7 +28,7 @@ export const tryLogin = (login: string, password: string) => {
     }).then(isAuthenticated => {
         return isAuthenticated;
     }).catch(e => {
-        return false;
+        return NO_CONNECTION;
     });
 }
 
@@ -43,8 +44,6 @@ export const getAllMessages = () => {
         return response.json();
     }).then(messagesJson => {
         return messagesJson;
-    }).catch(e => {
-        return [];
     });
 }
 

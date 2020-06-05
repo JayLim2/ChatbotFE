@@ -3,8 +3,28 @@ import {Image, StyleSheet, Text, View} from "react-native";
 import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from "native-base";
 import {EN_LANG, RU_LANG} from "../../configuration/files/Images";
 import {fetchFonts} from "../../configuration/Fonts";
+import {INDIGO} from "../../configuration/Constants";
 
 class SettingsActivity extends Component<any, any> {
+
+    static styles = StyleSheet.create({
+        root: {
+            padding: 20,
+            paddingTop: "5%",
+            alignItems: "center"
+        },
+        text: {
+            fontSize: 18
+        },
+        languages: {
+            flex: 1,
+            flexDirection: "row",
+            marginTop: 20
+        },
+        languageIcon: {
+            marginRight: 15
+        }
+    });
 
     constructor(props: object) {
         super(props);
@@ -28,14 +48,27 @@ class SettingsActivity extends Component<any, any> {
         }
     }
 
+    /**
+     * Handles click by "Return back" button
+     */
     onReturnBack() {
         this.props.navigation.goBack();
     }
 
+    /**
+     * Handles clicking by "English language" button
+     *
+     * TODO: add functionality of changing language to English
+     */
     onSelectEnglishLanguage() {
         console.log("English");
     }
 
+    /**
+     * Handles clicking by "English language" button
+     *
+     * TODO: add functionality of changing language to Russian
+     */
     onSelectRussianLanguage() {
         console.log("Russian");
     }
@@ -45,28 +78,11 @@ class SettingsActivity extends Component<any, any> {
             return null;
         }
 
-        const styles = StyleSheet.create({
-            root: {
-                padding: 20,
-                paddingTop: "5%",
-                alignItems: "center"
-            },
-            text: {
-                fontSize: 18
-            },
-            languages: {
-                flex: 1,
-                flexDirection: "row",
-                marginTop: 20
-            },
-            languageIcon: {
-                marginRight: 15
-            }
-        })
-
         return (
             <Container>
-                <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
+                <Header style={{backgroundColor: INDIGO}}
+                        androidStatusBarColor={INDIGO}
+                >
                     <Left>
                         <Button transparent onPress={this.onReturnBack}>
                             <Icon name='arrow-back'/>
@@ -78,14 +94,14 @@ class SettingsActivity extends Component<any, any> {
                     <Right/>
                 </Header>
                 <Content contentContainerStyle={{flexGrow: 1}}>
-                    <View style={styles.root}>
-                        <Text style={styles.text}>Select language:</Text>
-                        <View style={styles.languages}>
+                    <View style={SettingsActivity.styles.root}>
+                        <Text style={SettingsActivity.styles.text}>Select language:</Text>
+                        <View style={SettingsActivity.styles.languages}>
                             <Button transparent onPress={this.onSelectRussianLanguage}>
-                                <Image style={styles.languageIcon} source={RU_LANG} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={RU_LANG} />
                             </Button>
                             <Button transparent onPress={this.onSelectEnglishLanguage}>
-                                <Image style={styles.languageIcon} source={EN_LANG} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={EN_LANG} />
                             </Button>
                         </View>
                     </View>

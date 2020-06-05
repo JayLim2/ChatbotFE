@@ -3,32 +3,37 @@ import CurrentChat from "./CurrentChat";
 import {StyleSheet} from 'react-native';
 import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
 import {AppLoading} from "expo";
-import {MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/Constants";
+import {INDIGO, MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
 import {getAllMessages, saveAllMessages} from "../client/Client";
 import {openDatabase} from "../../configuration/DatabaseProperties";
 import * as SQLite from "expo-sqlite";
+import {SELECT_ALL_MESSAGES} from "../../queries/selectQueries";
+import {insertMessagesQuery} from "../../queries/insertQueries";
+import {DELETE_ALL_MESSAGES} from "../../queries/deleteQueries";
+import {MaterialIndicator} from "react-native-indicators";
+import {getCurrentDate} from "../utils/Utils";
 
 class CurrentChatActivity extends Component<any, any> {
 
     static styles = StyleSheet.create({
         footerInput: {
             borderTopWidth: 1,
-            borderTopColor: "indigo",
+            borderTopColor: INDIGO,
             width: "80%",
             backgroundColor: "#FFF"
         },
         footerSend: {
             borderTopWidth: 1,
-            borderTopColor: "indigo",
+            borderTopColor: INDIGO,
             width: "20%",
             backgroundColor: "#FFF",
             alignItems: "center"
         },
         sendButton: {
-            backgroundColor: "indigo",
+            backgroundColor: INDIGO,
             padding: 5,
             borderBottomStartRadius: 10,
             borderBottomEndRadius: 10
@@ -47,9 +52,15 @@ class CurrentChatActivity extends Component<any, any> {
         //create state
         this.state = {
             isLoadingComplete: false,
+            isMessagesLoadingComplete: false,
             messages: [],
             currentMessage: ""
         }
+
+        //state updaters
+        this.updateMessagesState = this.updateMessagesState.bind(this);
+        this.enableLoader = this.enableLoader.bind(this);
+        this.clearCurrentMessage = this.clearCurrentMessage.bind(this);
 
         //events handler
         this.onLoadMessages = this.onLoadMessages.bind(this);
@@ -57,6 +68,11 @@ class CurrentChatActivity extends Component<any, any> {
         this.onSendMessage = this.onSendMessage.bind(this);
         this.onClickMenu = this.onClickMenu.bind(this);
         this.onReturnBack = this.onReturnBack.bind(this);
+
+        //database
+        this.deleteAllMessagesFromDB = this.deleteAllMessagesFromDB.bind(this);
+        this.insertMessagesIntoDB = this.insertMessagesIntoDB.bind(this);
+        this.fetchMessagesFromDB = this.fetchMessagesFromDB.bind(this);
 
         //other methods
         this.createMessage = this.createMessage.bind(this);
@@ -78,24 +94,55 @@ class CurrentChatActivity extends Component<any, any> {
         }
     }
 
+    /* State updaters */
+
+    /**
+     * Update parameter "messages" in state
+     * @param messages
+     */
+    updateMessagesState(messages: MessageProps[]) {
+        this.setState({
+            messages: messages,
+            isMessagesLoadingComplete: true
+        })
+    }
+
+    enableLoader(isEnabled: true) {
+        this.setState({
+            isMessagesLoadingComplete: !isEnabled
+        });
+    }
+
+    clearCurrentMessage() {
+        this.setState({
+            currentMessage: ""
+        })
+    }
+
+    /* End of state updaters */
+
     /**
      * Load all messages
+     *
+     * At first tries load messages from server.
+     * If there are any network connection problems
+     * - tries load messages from local DB.
+     *
      */
     onLoadMessages() {
+        //fetching of messages
         getAllMessages()
             .then(result => { //if no problems with network
                 let messages: MessageProps[] = result;
-                this.setState({
-                    messages: messages
-                })
+                //refresh state of messages
+                this.updateMessagesState(messages);
+                //remove old data
+                this.deleteAllMessagesFromDB(); //TODO maybe delete by ids?
+                //try to insert into local DB
+                this.insertMessagesIntoDB(messages);
             })
             .catch(e => { //if any problems with network
-                //TODO select from DB
-                this.databaseInstance.readTransaction(
-                    (transaction) => {
-                        transaction.executeSql("SELECT * FROM messages");
-                    }
-                )
+                this.fetchMessagesFromDB();
             })
     }
 
@@ -113,26 +160,30 @@ class CurrentChatActivity extends Component<any, any> {
      * Handler for click on button "Send message"
      */
     onSendMessage() {
-        const messages = this.state.messages;
         const currentMessage = this.state.currentMessage;
+        const currentDate: string = getCurrentDate();
+
+        //wrap messages as special object
         let userMessage = this.createMessage(
             currentMessage,
             "USER",
-            "31.05.2020 16:00"
+            currentDate
         );
         let systemMessage = this.createMessage(
             this.getTestAnswer(userMessage),
             "SYSTEM",
-            "31.05.2020 16:01"
+            currentDate
         );
-        //TODO insert here sending onto server
+
+        //save messages on server
         saveAllMessages([userMessage, systemMessage])
             .then(result => {
                 //result - error message or JsonArray with messages ids
-                this.setState({
-                    messages: [...messages, userMessage, systemMessage],
-                    currentMessage: ""
-                })
+                if (typeof result === "object") {
+                    this.clearCurrentMessage();
+                    this.enableLoader(true);
+                    this.onLoadMessages();
+                }
             })
         //------------------------------------
     }
@@ -195,17 +246,120 @@ class CurrentChatActivity extends Component<any, any> {
         return answer;
     }
 
+    /* ############ DATABASE METHODS ################### */
+
+    deleteAllMessagesFromDB() {
+        const transactionFunction = (transaction: SQLTransaction) => {
+            transaction.executeSql(DELETE_ALL_MESSAGES);
+        };
+
+        const transactionErrorHandler = (error: SQLError) => {
+            console.log("Error during deleting all messages from local DB: \n\t", error);
+        }
+
+        this.databaseInstance.transaction(
+            transactionFunction,
+            transactionErrorHandler
+        );
+    }
+
+    insertMessagesIntoDB(messages: MessageProps[]) {
+        //Encapsulate insert messages query into object
+        let query: InsertMessageQuery = insertMessagesQuery(messages);
+
+        /* Transaction callbacks */
+        const transactionFunction = (transaction: SQLTransaction) => {
+            transaction.executeSql(
+                query.query as DOMString,
+                query.queryArgs as ObjectArray
+            )
+        };
+
+        const transactionErrorHandler = (error: SQLError) => {
+            console.log("Error during inserting array of messages into local DB: \n\t", error);
+        };
+
+        //Begin transaction
+        this.databaseInstance.transaction(
+            transactionFunction,
+            transactionErrorHandler
+        );
+    }
+
+    fetchMessagesFromDB() {
+        /* Query callbacks */
+        const querySuccessHandler = (
+            currentTransaction: SQLTransaction,
+            resultSet: SQLResultSet
+        ) => {
+            let rows = resultSet.rows;
+            let rowsCount = rows.length;
+            let messages: MessageProps[] = [];
+            for (let i = 0; i < rowsCount; i++) {
+                let currentRow = rows.item(i);
+                let message: MessageProps = {
+                    id: currentRow._id,
+                    message: currentRow.message,
+                    userId: currentRow.userId,
+                    date: currentRow.date
+                };
+                messages.push(message);
+            }
+            //refresh state of messages
+            this.updateMessagesState(messages);
+        };
+
+        const queryErrorHandler = (
+            currentTransaction: SQLTransaction,
+            error: SQLError
+        ) => {
+            console.log("Read error: ", error);
+            return true;
+        };
+
+        /* Transaction callbacks */
+        const transactionFunction = (transaction: SQLTransaction) => {
+            transaction.executeSql(
+                SELECT_ALL_MESSAGES,
+                [],
+                querySuccessHandler,
+                queryErrorHandler
+            );
+        };
+
+        const transactionErrorHandler = (error: SQLError) => {
+        };
+
+        const transactionSuccessHandler = () => {
+        };
+
+        //Begin transaction
+        this.databaseInstance.readTransaction(
+            transactionFunction,
+            transactionErrorHandler,
+            transactionSuccessHandler
+        )
+    }
+
+    /* ################################################ */
+
     render() {
         if (!this.state.isLoadingComplete) {
             return null;
         }
 
-        const {messages} = this.state;
+        const {isMessagesLoadingComplete, messages} = this.state;
         let {navigation} = this.props;
+
+        let chatNode = !isMessagesLoadingComplete ?
+            <MaterialIndicator color={INDIGO} style={{marginTop:100}}/> :
+            <CurrentChat messages={messages} navigation={navigation}/>;
 
         return (
             <Container>
-                <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
+                <Header style={{backgroundColor: INDIGO}}
+                        androidStatusBarColor={INDIGO}
+                >
                     <Left>
                         <Button transparent onPress={this.onReturnBack}>
                             <Icon name='arrow-back'/>
@@ -221,7 +375,7 @@ class CurrentChatActivity extends Component<any, any> {
                     </Right>
                 </Header>
                 <Content>
-                    <CurrentChat messages={messages} navigation={navigation}/>
+                    {chatNode}
                 </Content>
                 <Footer>
                     <View style={CurrentChatActivity.styles.footerInput}>

@@ -1,9 +1,31 @@
 import React, {Component} from "react";
-import PropTypes, {InferProps} from 'prop-types';
 import {StyleSheet, Text, View} from "react-native";
 import {MessageProps} from "./MessageProps";
+import {INDIGO, WHITE} from "../../../configuration/Constants";
 
-class UserMessage extends Component<any, any>{
+class UserMessage extends Component<any, any> {
+
+    static margin: number = 15;
+
+    static styles = StyleSheet.create({
+        root: {
+            width: "100%",
+            alignItems: "flex-end"
+        },
+        messageContainer: {
+            width: "75%",
+            padding: 20,
+            margin: UserMessage.margin,
+            marginTop: UserMessage.margin / 2,
+            marginBottom: UserMessage.margin / 2,
+            borderRadius: 10,
+            backgroundColor: INDIGO,
+        },
+        messageText: {
+            color: WHITE,
+            textAlign: "right"
+        }
+    });
 
     constructor(props: MessageProps) {
         super(props);
@@ -12,32 +34,10 @@ class UserMessage extends Component<any, any>{
     render(): React.ReactNode {
         const {message} = this.props;
 
-        const margin: number = 15;
-
-        const styles = StyleSheet.create({
-            root: {
-                width: "100%",
-                alignItems: "flex-end"
-            },
-            messageContainer: {
-                width: "75%",
-                padding:20,
-                margin: margin,
-                marginTop: margin / 2,
-                marginBottom: margin / 2,
-                borderRadius: 10,
-                backgroundColor:"indigo",
-            },
-            messageText: {
-                color: "#FFF",
-                textAlign: "right"
-            }
-        })
-
         return (
-            <View style={styles.root}>
-                <View style={styles.messageContainer}>
-                    <Text style={styles.messageText}>{message}</Text>
+            <View style={UserMessage.styles.root}>
+                <View style={UserMessage.styles.messageContainer}>
+                    <Text style={UserMessage.styles.messageText}>{message}</Text>
                 </View>
             </View>
         );

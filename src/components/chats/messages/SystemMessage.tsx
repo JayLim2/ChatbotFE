@@ -1,8 +1,31 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {MessageProps} from "./MessageProps";
+import {BLACK} from "../../../configuration/Constants";
 
-class SystemMessage extends Component<any, any>{
+class SystemMessage extends Component<any, any> {
+
+    static margin: number = 15;
+
+    static styles = StyleSheet.create({
+        root: {
+            width: "100%",
+            alignItems: "flex-start"
+        },
+        messageContainer: {
+            width: "75%",
+            padding: 20,
+            margin: SystemMessage.margin,
+            marginTop: SystemMessage.margin / 2,
+            marginBottom: SystemMessage.margin / 2,
+            backgroundColor: "#DDD",
+            borderRadius: 10
+        },
+        messageText: {
+            color: BLACK,
+            textAlign: "left"
+        }
+    })
 
     constructor(props: MessageProps) {
         super(props);
@@ -11,32 +34,10 @@ class SystemMessage extends Component<any, any>{
     render(): React.ReactNode {
         const {message} = this.props;
 
-        const margin: number = 15;
-
-        const styles = StyleSheet.create({
-            root: {
-                width: "100%",
-                alignItems: "flex-start"
-            },
-            messageContainer: {
-                width: "75%",
-                padding:20,
-                margin: margin,
-                marginTop: margin / 2,
-                marginBottom: margin / 2,
-                backgroundColor:"#DDD",
-                borderRadius: 10
-            },
-            messageText: {
-                color: "#000",
-                textAlign: "left"
-            }
-        })
-
         return (
-            <View style={styles.root}>
-                <View style={styles.messageContainer}>
-                    <Text style={styles.messageText}>{message}</Text>
+            <View style={SystemMessage.styles.root}>
+                <View style={SystemMessage.styles.messageContainer}>
+                    <Text style={SystemMessage.styles.messageText}>{message}</Text>
                 </View>
             </View>
         );

@@ -28,7 +28,8 @@
     "react-native-safe-area-context": "1.0.0",
     "i18next": "19.4.4",
     "react-i18next": "11.4.0",
-    "react-native-localize": "1.4.0"
+    "react-native-localize": "1.4.0",
+    "moment": "~2.26.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

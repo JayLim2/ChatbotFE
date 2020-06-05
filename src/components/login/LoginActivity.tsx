@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import LoginForm from "./LoginForm";
 import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'native-base';
-import {SETTINGS_ACTIVITY} from "../../configuration/Constants";
+import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
 
 const LoginActivity = ({navigation}) => {
@@ -34,7 +34,9 @@ const LoginActivity = ({navigation}) => {
 
     return (
         <Container>
-            <Header style={{backgroundColor: "indigo"}} androidStatusBarColor={"indigo"}>
+            <Header style={{backgroundColor: INDIGO}}
+                    androidStatusBarColor={INDIGO}
+            >
                 <Body>
                     <Title>Login</Title>
                 </Body>
