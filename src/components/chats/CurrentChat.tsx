@@ -26,7 +26,7 @@ class CurrentChat extends React.Component<any, any> {
             let k: number = 0;
             for (const message of messages) {
                 messagesItems.push(
-                    message.userId !== "USER" ?
+                    message.userId === "SYSTEM" ?
                         <SystemMessage key={++k}
                                        message={message.message}
                                        date={message.date}
