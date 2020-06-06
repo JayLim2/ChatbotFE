@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
 import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from "native-base";
-import {EN_LANG, RU_LANG} from "../../configuration/files/Images";
+import images from "assets/images";
+import i18n from "i18next";
 import {fetchFonts} from "../../configuration/Fonts";
 import {INDIGO} from "../../configuration/Constants";
 
@@ -61,7 +62,7 @@ class SettingsActivity extends Component<any, any> {
      * TODO: add functionality of changing language to English
      */
     onSelectEnglishLanguage() {
-        console.log("English");
+        i18n.changeLanguage("en");
     }
 
     /**
@@ -70,7 +71,7 @@ class SettingsActivity extends Component<any, any> {
      * TODO: add functionality of changing language to Russian
      */
     onSelectRussianLanguage() {
-        console.log("Russian");
+        i18n.changeLanguage("ru");
     }
 
     render(): React.ReactNode {
@@ -89,19 +90,19 @@ class SettingsActivity extends Component<any, any> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Settings</Title>
+                        <Title>{i18n.t("settings:title")}</Title>
                     </Body>
                     <Right/>
                 </Header>
                 <Content contentContainerStyle={{flexGrow: 1}}>
                     <View style={SettingsActivity.styles.root}>
-                        <Text style={SettingsActivity.styles.text}>Select language:</Text>
+                        <Text style={SettingsActivity.styles.text}>{i18n.t("settings:buttons.changeLanguageTittle")}</Text>
                         <View style={SettingsActivity.styles.languages}>
                             <Button transparent onPress={this.onSelectRussianLanguage}>
-                                <Image style={SettingsActivity.styles.languageIcon} source={RU_LANG} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.ru} />
                             </Button>
                             <Button transparent onPress={this.onSelectEnglishLanguage}>
-                                <Image style={SettingsActivity.styles.languageIcon} source={EN_LANG} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.en} />
                             </Button>
                         </View>
                     </View>

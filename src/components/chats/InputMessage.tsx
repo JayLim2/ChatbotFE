@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {MESSAGE_INPUT_PLACEHOLDER} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import CurrentChatActivity from "./CurrentChatActivity";
 import {Text, Button, View} from "native-base";
+import i18n from "i18next";
 
 class InputMessage extends Component<any, any> {
 
@@ -33,7 +33,7 @@ class InputMessage extends Component<any, any> {
     render(): React.ReactNode {
         return (
             <View>
-                <Input placeholder={MESSAGE_INPUT_PLACEHOLDER}
+                <Input placeholder={i18n.t("chat:fields.input.placeholder")}
                        onChangeText={this.onInputMessage}
                 />
             </View>

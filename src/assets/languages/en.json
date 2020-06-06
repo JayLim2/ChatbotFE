@@ -1,0 +1,43 @@
+{
+  "login": {
+    "title": "Login",
+    "buttons": {
+      "signIn": "Sign In"
+    },
+    "fields": {
+      "login": {
+        "label": "Login:",
+        "placeholder": "Your login"
+      },
+      "password": {
+        "label": "Password:",
+        "placeholder": "Your password"
+      }
+    },
+    "messages": {
+      "invalidCredentials": "Invalid login or password",
+      "wait": "Please wait...",
+      "noConnection": "No connection."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "buttons": {
+      "changeLanguageTittle": "Select language:"
+    }
+  },
+  "chatsList": {
+    "title": "Home",
+    "text": {
+      "openChatPrompt": "Click on button in right bottom corner to open chat."
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "fields": {
+      "input": {
+        "placeholder": "Input message"
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "login": {
+    "title": "Вход",
+    "buttons": {
+      "signIn": "Войти"
+    },
+    "fields": {
+      "login": {
+        "label": "Логин:",
+        "placeholder": "Ваш логин"
+      },
+      "password": {
+        "label": "Пароль:",
+        "placeholder": "Ваш пароль"
+      }
+    },
+    "messages": {
+      "invalidCredentials": "Неправильный логин или пароль",
+      "wait": "Пожалуйста, подождите...",
+      "noConnection": "Отсутствует подключение."
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "buttons": {
+      "changeLanguageTittle": "Выберите язык:"
+    }
+  },
+  "chatsList": {
+    "title": "Чаты",
+    "text": {
+      "openChatPrompt": "Нажмите на кнопку в правом нижнем углу, чтобы открыть чат."
+    }
+  },
+  "chat": {
+    "title": "Чат",
+    "fields": {
+      "input": {
+        "placeholder": "Введите сообщение"
+      }
+    }
+  }
+}

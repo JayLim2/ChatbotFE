@@ -12,7 +12,8 @@ import {AppLoading} from "expo";
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 
-import {CURRENT_CHAT_ACTIVITY, INDIGO, MAIN_CHATS_PAGE_TEXT} from "../../configuration/Constants";
+import {CURRENT_CHAT_ACTIVITY, INDIGO} from "../../configuration/Constants";
+import i18n from "i18next";
 
 class ChatsList extends Component<any, any>{
 
@@ -39,7 +40,7 @@ class ChatsList extends Component<any, any>{
                     fontSize: 18,
                     color: "gray",
                     textAlign: "center"
-                }}>{MAIN_CHATS_PAGE_TEXT}</Text>
+                }}>{i18n.t("chatsList:text.openChatPrompt")}</Text>
 
                 <Fab
                     active={this.state.active}

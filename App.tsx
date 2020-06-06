@@ -10,14 +10,9 @@ import SettingsActivity from "./src/components/settings/SettingsActivity";
 import {openDatabase} from "./src/configuration/DatabaseProperties";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
 import {SQLite} from "expo/build/globals.web";
+import {LOGIN_ACTIVITY, HOME_ACTIVITY, CURRENT_CHAT_ACTIVITY, SETTINGS_ACTIVITY} from "./src/configuration/Constants"
 
 const Stack = createStackNavigator();
-
-//Routes names
-export const LOGIN_ACTIVITY = "Login";
-export const HOME_ACTIVITY = "Home";
-export const CURRENT_CHAT_ACTIVITY = "CurrentChat";
-export const SETTINGS_ACTIVITY = "Settings";
 
 const createMessagesTable = (databaseInstance: SQLite.WebSQLDatabase) => {
     const transactionCallback = (transaction: SQLTransaction) => {

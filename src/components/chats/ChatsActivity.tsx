@@ -3,6 +3,7 @@ import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'nati
 import ChatsList from "./ChatsList";
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
+import i18n from "i18next";
 
 const ChatsActivity = ({navigation}) => {
 
@@ -38,7 +39,7 @@ const ChatsActivity = ({navigation}) => {
                     androidStatusBarColor={INDIGO}
             >
                 <Body>
-                    <Title>Home</Title>
+                    <Title>{i18n.t("chatsList:title")}</Title>
                 </Body>
                 <Right>
                     <Button transparent onPress={onClickMenu}>

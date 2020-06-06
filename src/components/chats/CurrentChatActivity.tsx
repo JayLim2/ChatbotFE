@@ -3,7 +3,7 @@ import CurrentChat from "./CurrentChat";
 import {StyleSheet} from 'react-native';
 import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
 import {AppLoading} from "expo";
-import {INDIGO, MESSAGE_INPUT_PLACEHOLDER, SETTINGS_ACTIVITY} from "../../configuration/Constants";
+import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
@@ -15,6 +15,7 @@ import {insertMessagesQuery} from "../../queries/insertQueries";
 import {DELETE_ALL_MESSAGES} from "../../queries/deleteQueries";
 import {MaterialIndicator} from "react-native-indicators";
 import {getCurrentDate} from "../utils/Utils";
+import i18n from "i18next";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -366,7 +367,7 @@ class CurrentChatActivity extends Component<any, any> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Chat</Title>
+                        <Title>{i18n.t("chat:title")}</Title>
                     </Body>
                     <Right>
                         <Button transparent onPress={this.onClickMenu}>
@@ -379,7 +380,7 @@ class CurrentChatActivity extends Component<any, any> {
                 </Content>
                 <Footer>
                     <View style={CurrentChatActivity.styles.footerInput}>
-                        <Input placeholder={MESSAGE_INPUT_PLACEHOLDER}
+                        <Input placeholder={i18n.t("chat:fields.input.placeholder")}
                                value={this.state.currentMessage}
                                onChangeText={this.onInputMessage}
                         />

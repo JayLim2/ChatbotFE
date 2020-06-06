@@ -3,6 +3,7 @@ import LoginForm from "./LoginForm";
 import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'native-base';
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
+import i18n from "i18next";
 
 const LoginActivity = ({navigation}) => {
 
@@ -38,7 +39,7 @@ const LoginActivity = ({navigation}) => {
                     androidStatusBarColor={INDIGO}
             >
                 <Body>
-                    <Title>Login</Title>
+                    <Title>{i18n.t("login:title")}</Title>
                 </Body>
                 <Right>
                     <Button transparent onPress={onClickMenu}>
