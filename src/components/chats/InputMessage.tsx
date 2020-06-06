@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Input} from "react-native-elements";
 import CurrentChatActivity from "./CurrentChatActivity";
 import {Text, Button, View} from "native-base";
-import i18n from "i18next";
+import {withTranslation} from "react-i18next";
 
 class InputMessage extends Component<any, any> {
 
@@ -31,9 +31,10 @@ class InputMessage extends Component<any, any> {
     }
 
     render(): React.ReactNode {
+        const {t} = this.props;
         return (
             <View>
-                <Input placeholder={i18n.t("chat:fields.input.placeholder")}
+                <Input placeholder={t("chat:fields.input.placeholder")}
                        onChangeText={this.onInputMessage}
                 />
             </View>
@@ -41,4 +42,5 @@ class InputMessage extends Component<any, any> {
     }
 }
 
-export default InputMessage;
+// @ts-ignore
+export default withTranslation()(InputMessage);

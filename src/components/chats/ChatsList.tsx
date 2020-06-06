@@ -13,7 +13,7 @@ import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 
 import {CURRENT_CHAT_ACTIVITY, INDIGO} from "../../configuration/Constants";
-import i18n from "i18next";
+import {withTranslation} from "react-i18next";
 
 class ChatsList extends Component<any, any>{
 
@@ -30,6 +30,7 @@ class ChatsList extends Component<any, any>{
     }
 
     render(): React.ReactNode {
+        const {t} = this.props;
         return (
             <View style={{
                 height:"100%",
@@ -40,7 +41,7 @@ class ChatsList extends Component<any, any>{
                     fontSize: 18,
                     color: "gray",
                     textAlign: "center"
-                }}>{i18n.t("chatsList:text.openChatPrompt")}</Text>
+                }}>{t("chatsList:text.openChatPrompt")}</Text>
 
                 <Fab
                     active={this.state.active}
@@ -57,4 +58,4 @@ class ChatsList extends Component<any, any>{
     }
 }
 
-export default ChatsList;
+export default withTranslation()(ChatsList);

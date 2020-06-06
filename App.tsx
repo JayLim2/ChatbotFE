@@ -11,9 +11,7 @@ import {openDatabase} from "./src/configuration/DatabaseProperties";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
 import {SQLite} from "expo/build/globals.web";
 import {LOGIN_ACTIVITY, HOME_ACTIVITY, CURRENT_CHAT_ACTIVITY, SETTINGS_ACTIVITY} from "./src/configuration/Constants"
-import {initReactI18next} from "react-i18next";
-import languages from "assets/languages";
-import i18next from "i18next";
+import "assets/i18nx"
 
 const Stack = createStackNavigator();
 
@@ -41,18 +39,6 @@ const initialize = () => {
     let databaseInstance = openDatabase();
     //create table 'Messages'
     createMessagesTable(databaseInstance);
-    i18next
-        .use(initReactI18next)
-        .init({
-            //debug: true,
-            lng: "en",
-            fallbackLng: 'en',
-            ns: ["login", "settings", "chatsList", "chat"],
-            resources: languages,
-            interpolation: {
-                escapeValue: false, // not needed for react as it does escape per default to prevent xss!
-            },
-        });
 }
 
 const App = () => {

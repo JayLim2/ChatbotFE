@@ -15,7 +15,7 @@ import {insertMessagesQuery} from "../../queries/insertQueries";
 import {DELETE_ALL_MESSAGES} from "../../queries/deleteQueries";
 import {MaterialIndicator} from "react-native-indicators";
 import {getCurrentDate} from "../utils/Utils";
-import i18n from "i18next";
+import {withTranslation} from "react-i18next";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -352,8 +352,9 @@ class CurrentChatActivity extends Component<any, any> {
         const {isMessagesLoadingComplete, messages} = this.state;
         let {navigation} = this.props;
 
+        const {t} = this.props;
         let chatNode = !isMessagesLoadingComplete ?
-            <MaterialIndicator color={INDIGO} style={{marginTop:100}}/> :
+            <MaterialIndicator color={INDIGO} style={{marginTop: 100}}/> :
             <CurrentChat messages={messages} navigation={navigation}/>;
 
         return (
@@ -367,7 +368,7 @@ class CurrentChatActivity extends Component<any, any> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>{i18n.t("chat:title")}</Title>
+                        <Title>{t("chat:title")}</Title>
                     </Body>
                     <Right>
                         <Button transparent onPress={this.onClickMenu}>
@@ -380,7 +381,7 @@ class CurrentChatActivity extends Component<any, any> {
                 </Content>
                 <Footer>
                     <View style={CurrentChatActivity.styles.footerInput}>
-                        <Input placeholder={i18n.t("chat:fields.input.placeholder")}
+                        <Input placeholder={t("chat:fields.input.placeholder")}
                                value={this.state.currentMessage}
                                onChangeText={this.onInputMessage}
                         />
@@ -396,4 +397,4 @@ class CurrentChatActivity extends Component<any, any> {
     }
 }
 
-export default CurrentChatActivity;
+export default withTranslation()(CurrentChatActivity);

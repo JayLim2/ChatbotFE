@@ -11,9 +11,9 @@ import {
     HOME_ACTIVITY, INDIGO,
     NO_CONNECTION,
 } from "../../configuration/Constants";
-import i18n from "i18next";
 import {fetchFonts} from "../../configuration/Fonts";
 import {tryLogin} from "../client/Client";
+import {withTranslation} from "react-i18next";
 
 class LoginForm extends Component<any, any> {
 
@@ -181,16 +181,18 @@ class LoginForm extends Component<any, any> {
             authenticated
         } = this.state;
 
+        const {t} = this.props;
+
         //Enable loader if need
         const loader = authenticating ?
             <MaterialIndicator color={INDIGO}/> : null;
 
         //Get authentication result message
         const message = noConnection ?
-            <ErrorMessage message={i18n.t("login:messages.noConnection")}/> :
+            <ErrorMessage message={t("login:messages.noConnection")}/> :
             (authenticated ?
-                <SuccessMessage message={i18n.t("login:messages.wait")}/> :
-                <ErrorMessage message={i18n.t("login:messages.invalidCredentials")}/>);
+                <SuccessMessage message={t("login:messages.wait")}/> :
+                <ErrorMessage message={t("login:messages.invalidCredentials")}/>);
 
         //Render
         return (
@@ -202,16 +204,16 @@ class LoginForm extends Component<any, any> {
                 {
                     !authenticating &&
                     <View style={LoginForm.styles.container}>
-                        <Text>{i18n.t("login:fields.login.label")}</Text>
-                        <Input placeholder={i18n.t("login:fields.login.placeholder")}
+                        <Text>{t("login:fields.login.label")}</Text>
+                        <Input placeholder={t("login:fields.login.placeholder")}
                                leftIcon={{
                                    type: 'font-awesome',
                                    name: 'user'
                                }}
                                onChangeText={this.onInputLogin}
                         />
-                        <Text>{i18n.t("login:fields.password.label")}</Text>
-                        <Input placeholder={i18n.t("login:fields.password.placeholder")}
+                        <Text>{t("login:fields.password.label")}</Text>
+                        <Input placeholder={t("login:fields.password.placeholder")}
                                leftIcon={{
                                    type: 'font-awesome',
                                    name: 'lock'
@@ -222,7 +224,7 @@ class LoginForm extends Component<any, any> {
                         <Button full onPress={this.onLogin}
                                 style={{backgroundColor: INDIGO}}
                         >
-                            <Text>{i18n.t("login:buttons.signIn")}</Text>
+                            <Text>{t("login:buttons.signIn")}</Text>
                         </Button>
                     </View>
                 }
@@ -231,4 +233,5 @@ class LoginForm extends Component<any, any> {
     }
 }
 
-export default LoginForm;
+// @ts-ignore
+export default withTranslation()(LoginForm);

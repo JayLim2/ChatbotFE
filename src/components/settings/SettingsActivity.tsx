@@ -2,9 +2,10 @@ import React, {Component} from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
 import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from "native-base";
 import images from "assets/images";
-import i18n from "i18next";
+import i18n from "assets/i18nx";
 import {fetchFonts} from "../../configuration/Fonts";
 import {INDIGO} from "../../configuration/Constants";
+import {withTranslation} from "react-i18next";
 
 class SettingsActivity extends Component<any, any> {
 
@@ -78,6 +79,7 @@ class SettingsActivity extends Component<any, any> {
         if (!this.state.isLoadingComplete) {
             return null;
         }
+        const {t} = this.props;
 
         return (
             <Container>
@@ -90,13 +92,13 @@ class SettingsActivity extends Component<any, any> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>{i18n.t("settings:title")}</Title>
+                        <Title>{t("settings:title")}</Title>
                     </Body>
                     <Right/>
                 </Header>
                 <Content contentContainerStyle={{flexGrow: 1}}>
                     <View style={SettingsActivity.styles.root}>
-                        <Text style={SettingsActivity.styles.text}>{i18n.t("settings:buttons.changeLanguageTittle")}</Text>
+                        <Text style={SettingsActivity.styles.text}>{t("settings:buttons.changeLanguageTittle")}</Text>
                         <View style={SettingsActivity.styles.languages}>
                             <Button transparent onPress={this.onSelectRussianLanguage}>
                                 <Image style={SettingsActivity.styles.languageIcon} source={images.languages.ru} />
@@ -113,4 +115,4 @@ class SettingsActivity extends Component<any, any> {
 
 }
 
-export default SettingsActivity;
+export default withTranslation()(SettingsActivity);

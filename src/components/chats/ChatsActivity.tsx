@@ -3,7 +3,8 @@ import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'nati
 import ChatsList from "./ChatsList";
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
-import i18n from "i18next";
+import i18n from "assets/i18nx";
+import {withTranslation} from "react-i18next";
 
 const ChatsActivity = ({navigation}) => {
 
@@ -54,4 +55,5 @@ const ChatsActivity = ({navigation}) => {
     )
 }
 
-export default ChatsActivity;
+// @ts-ignore
+export default withTranslation()(ChatsActivity);
