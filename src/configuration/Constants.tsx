@@ -1,7 +1,3 @@
-//Test user
-export const LOGIN = "admin";
-export const PASSWORD = "123";
-
 //Messages
 export const NO_CONNECTION = "No connection.";
 

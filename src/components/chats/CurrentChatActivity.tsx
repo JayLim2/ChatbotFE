@@ -8,7 +8,7 @@ import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
 import {getAllMessages, saveAllMessages} from "../client/Client";
-import {openDatabase} from "../../configuration/DatabaseProperties";
+import {openDatabase} from "../../services/DatabaseService";
 import * as SQLite from "expo-sqlite";
 import {SELECT_ALL_MESSAGES} from "../../queries/selectQueries";
 import {insertMessagesQuery} from "../../queries/insertQueries";
@@ -242,7 +242,8 @@ class CurrentChatActivity extends Component<any, any> {
                 answer = "See you later!";
                 break;
             default:
-                answer = "Kill. All. Humans.";
+                //answer = "Kill. All. Humans.";
+                answer = "Sorry, I have a headache.";
         }
         return answer;
     }

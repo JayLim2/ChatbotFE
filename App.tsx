@@ -7,7 +7,7 @@ import LoginActivity from "./src/components/login/LoginActivity";
 import ChatsActivity from "./src/components/chats/ChatsActivity";
 import CurrentChatActivity from "./src/components/chats/CurrentChatActivity";
 import SettingsActivity from "./src/components/settings/SettingsActivity";
-import {openDatabase} from "./src/configuration/DatabaseProperties";
+import {openDatabase} from "./src/services/DatabaseService";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
 import {SQLite} from "expo/build/globals.web";
 import {LOGIN_ACTIVITY, HOME_ACTIVITY, CURRENT_CHAT_ACTIVITY, SETTINGS_ACTIVITY} from "./src/configuration/Constants"

@@ -27,7 +27,7 @@
     }
   },
   "chatsList": {
-    "title": "Home",
+    "title": "Interlocutor",
     "text": {
       "openChatPrompt": "Click on button in right bottom corner to open chat."
     }
