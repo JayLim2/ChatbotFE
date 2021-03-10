@@ -19,7 +19,7 @@ const LoginActivity = ({navigation}) => {
         } finally {
             setLoadingComplete(true);
         }
-    }
+    };
 
     useEffect(() => {
         init();
@@ -32,7 +32,7 @@ const LoginActivity = ({navigation}) => {
 
     const onClickMenu = () => {
         navigation.navigate(SETTINGS_ACTIVITY);
-    }
+    };
 
     return (
         <Container>
@@ -53,6 +53,6 @@ const LoginActivity = ({navigation}) => {
             </Content>
         </Container>
     );
-}
+};
 
 export default withTranslation()(LoginActivity);

@@ -1,16 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {
-    Container, Header, Title,
-    Content, Footer, FooterTab,
-    Button, Left, Right,
-    Body, Icon, Text, Fab
-} from 'native-base';
-import * as Font from 'expo-font';
-import {Ionicons} from '@expo/vector-icons';
-import {AppLoading} from "expo";
-import {Input} from 'react-native-elements';
-import {MaterialIndicator} from 'react-native-indicators';
+import {View} from 'react-native';
+import {Fab, Icon, Text} from 'native-base';
 
 import {CURRENT_CHAT_ACTIVITY, INDIGO} from "../../configuration/Constants";
 import {withTranslation} from "react-i18next";
@@ -21,7 +11,7 @@ class ChatsList extends Component<any, any>{
         super(props);
         this.state = {
             active: true
-        }
+        };
         this.onOpenChatClick = this.onOpenChatClick.bind(this);
     }
 

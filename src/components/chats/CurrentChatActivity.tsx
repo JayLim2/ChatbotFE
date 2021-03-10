@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import CurrentChat from "./CurrentChat";
 import {StyleSheet} from 'react-native';
 import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
-import {AppLoading} from "expo";
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {MessageProps} from "./messages/MessageProps";
@@ -56,7 +55,7 @@ class CurrentChatActivity extends Component<any, any> {
             isMessagesLoadingComplete: false,
             messages: [],
             currentMessage: ""
-        }
+        };
 
         //state updaters
         this.updateMessagesState = this.updateMessagesState.bind(this);
@@ -257,7 +256,7 @@ class CurrentChatActivity extends Component<any, any> {
 
         const transactionErrorHandler = (error: SQLError) => {
             console.log("Error during deleting all messages from local DB: \n\t", error);
-        }
+        };
 
         this.databaseInstance.transaction(
             transactionFunction,

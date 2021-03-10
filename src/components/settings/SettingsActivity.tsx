@@ -32,7 +32,7 @@ class SettingsActivity extends Component<any, any> {
         super(props);
         this.state = {
             isLoadingComplete: false,
-        }
+        };
         this.onReturnBack = this.onReturnBack.bind(this);
         this.onSelectEnglishLanguage = this.onSelectEnglishLanguage.bind(this);
         this.onSelectRussianLanguage = this.onSelectRussianLanguage.bind(this);

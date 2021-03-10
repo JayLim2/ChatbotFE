@@ -19,7 +19,7 @@ const ChatsActivity = ({navigation}) => {
         } finally {
             setLoadingComplete(true);
         }
-    }
+    };
 
     useEffect(() => {
         init();
@@ -32,7 +32,7 @@ const ChatsActivity = ({navigation}) => {
 
     const onClickMenu = () => {
         navigation.navigate(SETTINGS_ACTIVITY);
-    }
+    };
 
     return (
         <Container>
@@ -53,7 +53,7 @@ const ChatsActivity = ({navigation}) => {
             </Content>
         </Container>
     )
-}
+};
 
 // @ts-ignore
 export default withTranslation()(ChatsActivity);
