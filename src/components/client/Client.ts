@@ -6,7 +6,8 @@
  */
 import {MESSAGES_API_LINK, USERS_API_LINK} from "../../configuration/ServerProperties";
 import {MessageProps} from "../chats/messages/MessageProps";
-import {NO_CONNECTION} from "../../configuration/Constants";
+import {handleResponse} from "../utils/Utils";
+import {HttpError} from "../../models/HttpError";
 
 export const tryLogin = (login: string, password: string) => {
     //Put data into form
@@ -23,12 +24,18 @@ export const tryLogin = (login: string, password: string) => {
             method: 'POST',
             body: formData
         }
-    ).then(response => {
-        return response.json();
+    ).then((response: Response) => {
+        return handleResponse(response, url);
     }).then(isAuthenticated => {
         return isAuthenticated;
-    }).catch(e => {
-        return NO_CONNECTION;
+    }).catch((error: TypeError | HttpError) => {
+        if (error instanceof TypeError) {
+            let errorObj: HttpError = new HttpError();
+            errorObj.status = 0;
+            errorObj.message = 'No connection.';
+            throw errorObj;
+        }
+        throw error;
     });
 }
 

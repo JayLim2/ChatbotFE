@@ -250,11 +250,11 @@ class CurrentChatActivity extends Component<any, any> {
     /* ############ DATABASE METHODS ################### */
 
     deleteAllMessagesFromDB() {
-        const transactionFunction = (transaction: SQLTransaction) => {
+        const transactionFunction = (transaction: SQLite.SQLTransaction) => {
             transaction.executeSql(DELETE_ALL_MESSAGES);
         };
 
-        const transactionErrorHandler = (error: SQLError) => {
+        const transactionErrorHandler = (error: SQLite.SQLError) => {
             console.log("Error during deleting all messages from local DB: \n\t", error);
         };
 
@@ -269,14 +269,14 @@ class CurrentChatActivity extends Component<any, any> {
         let query: InsertMessageQuery = insertMessagesQuery(messages);
 
         /* Transaction callbacks */
-        const transactionFunction = (transaction: SQLTransaction) => {
+        const transactionFunction = (transaction: SQLite.SQLTransaction) => {
             transaction.executeSql(
-                query.query as DOMString,
-                query.queryArgs as ObjectArray
+                query.query as string,
+                query.queryArgs as any[] | undefined
             )
         };
 
-        const transactionErrorHandler = (error: SQLError) => {
+        const transactionErrorHandler = (error: SQLite.SQLError) => {
             console.log("Error during inserting array of messages into local DB: \n\t", error);
         };
 
@@ -290,8 +290,8 @@ class CurrentChatActivity extends Component<any, any> {
     fetchMessagesFromDB() {
         /* Query callbacks */
         const querySuccessHandler = (
-            currentTransaction: SQLTransaction,
-            resultSet: SQLResultSet
+            currentTransaction: SQLite.SQLTransaction,
+            resultSet: SQLite.SQLResultSet
         ) => {
             let rows = resultSet.rows;
             let rowsCount = rows.length;
@@ -311,15 +311,15 @@ class CurrentChatActivity extends Component<any, any> {
         };
 
         const queryErrorHandler = (
-            currentTransaction: SQLTransaction,
-            error: SQLError
+            currentTransaction: SQLite.SQLTransaction,
+            error: SQLite.SQLError
         ) => {
             console.log("Read error: ", error);
             return true;
         };
 
         /* Transaction callbacks */
-        const transactionFunction = (transaction: SQLTransaction) => {
+        const transactionFunction = (transaction: SQLite.SQLTransaction) => {
             transaction.executeSql(
                 SELECT_ALL_MESSAGES,
                 [],
@@ -328,7 +328,7 @@ class CurrentChatActivity extends Component<any, any> {
             );
         };
 
-        const transactionErrorHandler = (error: SQLError) => {
+        const transactionErrorHandler = (error: SQLite.SQLError) => {
         };
 
         const transactionSuccessHandler = () => {

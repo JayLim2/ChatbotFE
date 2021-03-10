@@ -14,6 +14,7 @@ import {
 import {fetchFonts} from "../../configuration/Fonts";
 import {tryLogin} from "../client/Client";
 import {withTranslation} from "react-i18next";
+import {HttpError} from "../../models/HttpError";
 
 class LoginForm extends Component<any, any> {
 
@@ -139,8 +140,8 @@ class LoginForm extends Component<any, any> {
                     secondsCount * 1000
                 )
             })
-            .catch(e => {
-                console.error("Error during authentication: ", e);
+            .catch((error: HttpError) => {
+                console.error("Error during authentication: ", error);
                 this.setAuthenticationFlags(
                     false, false, false, true
                 );

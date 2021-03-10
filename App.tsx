@@ -9,18 +9,18 @@ import CurrentChatActivity from "./src/components/chats/CurrentChatActivity";
 import SettingsActivity from "./src/components/settings/SettingsActivity";
 import {openDatabase} from "./src/services/DatabaseService";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
-import {SQLite} from "expo/build/globals.web";
+import * as SQLite from "expo-sqlite";
 import {LOGIN_ACTIVITY, HOME_ACTIVITY, CURRENT_CHAT_ACTIVITY, SETTINGS_ACTIVITY} from "./src/configuration/Constants"
 import "assets/i18nx"
 
 const Stack = createStackNavigator();
 
 const createMessagesTable = (databaseInstance: SQLite.WebSQLDatabase) => {
-    const transactionCallback = (transaction: SQLTransaction) => {
+    const transactionCallback = (transaction: SQLite.SQLTransaction) => {
         transaction.executeSql(CREATE_MESSAGES_TABLE);
     };
 
-    const transactionErrorCallback = (error: SQLError) => {
+    const transactionErrorCallback = (error: SQLite.SQLError) => {
         console.error(error.code + ": " + error.message);
     };
 
