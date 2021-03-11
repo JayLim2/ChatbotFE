@@ -8,21 +8,19 @@ import {MESSAGES_API_LINK, USERS_API_LINK} from "../../configuration/ServerPrope
 import {MessageProps} from "../chats/messages/MessageProps";
 import {handleResponse} from "../utils/Utils";
 import {HttpError} from "../../models/HttpError";
+import {encode} from 'base-64'
 
 export const tryLogin = (login: string, password: string) => {
-    //Put data into form
-    const formData = new FormData();
-    formData.append('login', login);
-    formData.append('password', password);
-
     //Try to validate credentials
-    let url = `${USERS_API_LINK}/validate/credentials`;
+    let url = `${USERS_API_LINK}/get`;
 
     return fetch(
         url,
         {
-            method: 'POST',
-            body: formData
+            method: 'GET',
+            headers: {
+                "Authorization": `Basic ` + encode(`${login}:${password}`)
+            }
         }
     ).then((response: Response) => {
         return handleResponse(response, url);

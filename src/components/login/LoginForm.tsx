@@ -3,18 +3,32 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'native-base';
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
-
 import ErrorMessage from "../utils/ErrorMessage";
-import SuccessMessage from "../utils/SuccessMessage";
-
-import {
-    HOME_ACTIVITY, INDIGO,
-    NO_CONNECTION,
-} from "../../configuration/Constants";
+import {HOME_ACTIVITY, INDIGO,} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
 import {tryLogin} from "../client/Client";
 import {withTranslation} from "react-i18next";
 import {HttpError} from "../../models/HttpError";
+
+const statusNames: Map<number, string> = new Map();
+statusNames.set(-1, "unknown");
+statusNames.set(0, "noConnection");
+statusNames.set(401, "invalidCredentials");
+statusNames.set(500, "internalError");
+
+type AuthResponseType = 'ok' | 'failed';
+
+class AuthResponse {
+    type: AuthResponseType;
+    status?: number;
+
+    constructor(type: AuthResponseType,
+                status?: number) {
+
+        this.type = type;
+        this.status = status;
+    }
+}
 
 class LoginForm extends Component<any, any> {
 
@@ -56,9 +70,6 @@ class LoginForm extends Component<any, any> {
         this.onLogin = this.onLogin.bind(this);
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
-
-        //other methods
-        this.setAuthenticationFlags = this.setAuthenticationFlags.bind(this);
     }
 
     async componentDidMount() {
@@ -73,78 +84,45 @@ class LoginForm extends Component<any, any> {
         }
     }
 
-    /**
-     * Set authentication flags
-     *
-     * @param noConnection - if no connection or other network troubles -> true, else -> false
-     * @param authenticating - response not received -> true, else -> false
-     * @param authenticated - credentials are valid -> true, else -> false
-     * @param authenticationResponseReceived - response received -> true, else -> false
-     * TODO: maybe merge flags 'authenticating' and 'authenticationResponseReceived'?
-     */
-    setAuthenticationFlags(noConnection: boolean,
-                           authenticating: boolean,
-                           authenticated: boolean,
-                           authenticationResponseReceived: boolean) {
-
-        this.setState({
-            noConnection: noConnection,
-            authenticating: authenticating,
-            authenticated: authenticated,
-            authenticationResponseReceived: authenticationResponseReceived
-        })
-    }
-
     onLogin() {
         const {login, password} = this.state;
 
         //start authentication
         this.setState({
-            authenticating: true
-        })
+            authenticating: true,
+            authResponse: null
+        });
 
         //validate credentials
         tryLogin(login, password)
             .then(validationResponse => {
-                //check connection
-                let noConnection =
-                    typeof validationResponse === 'string'
-                    && validationResponse === NO_CONNECTION;
-
-                //if no connection
-                if (noConnection) {
-                    this.setAuthenticationFlags(
-                        true, false, false, true
-                    );
-                    return;
-                }
-
-                //if connection there
-                this.setAuthenticationFlags(
-                    false, false, validationResponse, true
-                );
+                this.setState({
+                    authenticating: false
+                });
 
                 //if authenticated - open "Home" page
                 if (validationResponse) {
                     this.props.navigation.navigate(HOME_ACTIVITY);
+                } else {
+                    this.setState({
+                        authResponse: new AuthResponse('failed', 401)
+                    });
                 }
 
                 //hide messages
-                let secondsCount = 4;
-                setTimeout(
-                    () => {
-                        this.setState({
-                            authenticationResponseReceived: false
-                        })
-                    },
-                    secondsCount * 1000
-                )
+                const secondsCount = 4;
+                setTimeout(() => {
+                    this.setState({
+                        authResponse: null
+                    })
+                }, secondsCount * 1000)
             })
             .catch((error: HttpError) => {
                 console.error("Error during authentication: ", error);
-                this.setAuthenticationFlags(
-                    false, false, false, true
-                );
+                this.setState({
+                    authenticating: false,
+                    authResponse: new AuthResponse('failed', error.status)
+                })
             })
     }
 
@@ -175,12 +153,8 @@ class LoginForm extends Component<any, any> {
             return null;
         }
 
-        const {
-            noConnection,
-            authenticating,
-            authenticationResponseReceived,
-            authenticated
-        } = this.state;
+        const authenticating: boolean = this.state.authenticating;
+        const authResponse: AuthResponse = this.state.authResponse;
 
         const {t} = this.props;
 
@@ -189,17 +163,18 @@ class LoginForm extends Component<any, any> {
             <MaterialIndicator color={INDIGO}/> : null;
 
         //Get authentication result message
-        const message = noConnection ?
-            <ErrorMessage message={t("login:messages.noConnection")}/> :
-            (authenticated ?
-                <SuccessMessage message={t("login:messages.wait")}/> :
-                <ErrorMessage message={t("login:messages.invalidCredentials")}/>);
+        let message = null;
+        if (!authenticating && authResponse) {
+            const statusCode = authResponse.status !== undefined ? authResponse.status : -1;
+            const pathToMessage = statusNames.get(statusCode);
+            message = <ErrorMessage message={t(`login:messages.${pathToMessage}`)}/>;
+        }
 
         //Render
         return (
             <View style={LoginForm.styles.root}>
                 <View style={LoginForm.styles.infoBlock}>
-                    {authenticationResponseReceived ? message : null}
+                    {message}
                     {loader}
                 </View>
                 {
