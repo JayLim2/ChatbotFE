@@ -6,8 +6,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "base-64": "1.0.0",
+    "@react-native-async-storage/async-storage": "^1.14.1",
     "assets": "file:src/assets",
+    "base-64": "1.0.0",
     "expo": "40.0.1",
     "expo-font": "^8.1.1",
     "expo-splash-screen": "0.9.0",

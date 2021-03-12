@@ -1,5 +1,5 @@
 import moment, {Moment} from "moment";
-import {HttpError} from "../../models/HttpError";
+import {ErrorResponse, HttpError} from "../../models/HttpError";
 
 export const DATE_TIME_PATTERN = "DD.MM.YYYY HH:mm:ss";
 
@@ -26,4 +26,14 @@ export const handleResponse = (response: Response, url?: string): Promise<any> |
         errorObj.message = errorText;
         throw errorObj;
     }
+}
+
+export const handleError = (error: ErrorResponse) => {
+    if (error instanceof TypeError) {
+        let httpError: HttpError = new HttpError();
+        httpError.status = 0;
+        httpError.message = 'No connection.';
+        throw httpError;
+    }
+    throw error;
 }

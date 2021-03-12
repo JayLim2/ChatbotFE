@@ -1,5 +1,5 @@
-import {MessageProps} from "./messages/MessageProps";
+import {Message} from "./messages/Message";
 
 export interface ChatProps {
-    messages: MessageProps[]
+    messages: Message[]
 }

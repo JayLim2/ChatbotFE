@@ -1,0 +1,12 @@
+.chat-list {
+
+}
+
+.chat-list-item {
+    background: #cccccc;
+}
+
+.chat-list-item:hover, .chat-list-item:active {
+    background: indigo;
+    color: white;
+}

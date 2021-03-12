@@ -1,4 +1,4 @@
-import {MessageProps} from "../components/chats/messages/MessageProps";
+import {Message} from "../components/chats/messages/Message";
 
 const INSERT_MESSAGE_VALUES_PART = "(?, ?, ?, ?)";
 
@@ -7,7 +7,7 @@ const INSERT_MESSAGES =
     "messages (_id, message, userId, date) " +
     "VALUES ";
 
-export const insertMessagesQuery = (messages: MessageProps[]) => {
+export const insertMessagesQuery = (messages: Message[]) => {
     if(!messages || messages.length === 0) {
         return {
             query: null,

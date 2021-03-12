@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {MessageProps} from "./MessageProps";
 import {BLACK} from "../../../configuration/Constants";
+import {Message} from "../../../models/Message";
 
 class SystemMessage extends Component<any, any> {
 
@@ -27,7 +27,7 @@ class SystemMessage extends Component<any, any> {
         }
     })
 
-    constructor(props: MessageProps) {
+    constructor(props: Message) {
         super(props);
     }
 

@@ -4,9 +4,8 @@ import {StyleSheet} from 'react-native';
 import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
-import {MessageProps} from "./messages/MessageProps";
 import {fetchFonts} from "../../configuration/Fonts";
-import {getAllMessages, saveAllMessages} from "../client/Client";
+import {getAllMessages, getCurrentUserChats, saveAllMessages} from "../client/Client";
 import {openDatabase} from "../../services/DatabaseService";
 import * as SQLite from "expo-sqlite";
 import {SELECT_ALL_MESSAGES} from "../../queries/selectQueries";
@@ -15,6 +14,7 @@ import {DELETE_ALL_MESSAGES} from "../../queries/deleteQueries";
 import {MaterialIndicator} from "react-native-indicators";
 import {getCurrentDate} from "../utils/Utils";
 import {withTranslation} from "react-i18next";
+import {Message} from "../../models/Message";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -100,7 +100,7 @@ class CurrentChatActivity extends Component<any, any> {
      * Update parameter "messages" in state
      * @param messages
      */
-    updateMessagesState(messages: MessageProps[]) {
+    updateMessagesState(messages: Message[]) {
         this.setState({
             messages: messages,
             isMessagesLoadingComplete: true
@@ -132,8 +132,8 @@ class CurrentChatActivity extends Component<any, any> {
     onLoadMessages() {
         //fetching of messages
         getAllMessages()
-            .then(result => { //if no problems with network
-                let messages: MessageProps[] = result;
+            .then(allUserMessages => { //if no problems with network
+                let messages: Message[] = allUserMessages;
                 //refresh state of messages
                 this.updateMessagesState(messages);
                 //remove old data
@@ -195,7 +195,7 @@ class CurrentChatActivity extends Component<any, any> {
      * @param date
      */
     createMessage(message: string, userId: string, date: string) {
-        let messageObj: MessageProps = {
+        let messageObj: Message = {
             message: message,
             userId: userId,
             date: date
@@ -221,7 +221,7 @@ class CurrentChatActivity extends Component<any, any> {
      * Get hardcoded message by user message text
      * @param userMessage
      */
-    getTestAnswer(userMessage: MessageProps) {
+    getTestAnswer(userMessage: Message) {
         let message = userMessage.message;
         if (message) {
             message = message.trim().toLowerCase();
@@ -264,7 +264,7 @@ class CurrentChatActivity extends Component<any, any> {
         );
     }
 
-    insertMessagesIntoDB(messages: MessageProps[]) {
+    insertMessagesIntoDB(messages: Message[]) {
         //Encapsulate insert messages query into object
         let query: InsertMessageQuery = insertMessagesQuery(messages);
 
@@ -295,10 +295,10 @@ class CurrentChatActivity extends Component<any, any> {
         ) => {
             let rows = resultSet.rows;
             let rowsCount = rows.length;
-            let messages: MessageProps[] = [];
+            let messages: Message[] = [];
             for (let i = 0; i < rowsCount; i++) {
                 let currentRow = rows.item(i);
-                let message: MessageProps = {
+                let message: Message = {
                     id: currentRow._id,
                     message: currentRow.message,
                     userId: currentRow.userId,

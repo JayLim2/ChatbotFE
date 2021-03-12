@@ -15,6 +15,7 @@
       }
     },
     "messages": {
+      "unknown": "Unknown error",
       "invalidCredentials": "Invalid login or password",
       "wait": "Please wait...",
       "noConnection": "No connection."

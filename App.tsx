@@ -39,6 +39,7 @@ const initialize = () => {
     let databaseInstance = openDatabase();
     //create table 'Messages'
     createMessagesTable(databaseInstance);
+    //get auth token from AsyncStorage
 }
 
 const App = () => {

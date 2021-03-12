@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {MessageProps} from "./MessageProps";
+import {Message} from "./Message";
 import {INDIGO, WHITE} from "../../../configuration/Constants";
 
 class UserMessage extends Component<any, any> {
@@ -27,7 +27,7 @@ class UserMessage extends Component<any, any> {
         }
     });
 
-    constructor(props: MessageProps) {
+    constructor(props: Message) {
         super(props);
     }
 
