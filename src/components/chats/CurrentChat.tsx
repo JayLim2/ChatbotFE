@@ -58,12 +58,12 @@ class CurrentChat extends React.Component<any, any> {
                         <SystemMessage key={++k}
                                        message={message.message}
                                        date={message.dateTime}
-                                       userId={message.user?.id}
+                                       userName={message.user?.login}
                         /> :
                         <UserMessage key={++k}
                                      message={message.message}
                                      date={message.dateTime}
-                                     userId={message.user?.id}
+                                     userName={message.user?.login}
                         />
                 );
             }
