@@ -32,13 +32,20 @@ class UserMessage extends Component<any, any> {
     }
 
     render(): React.ReactNode {
-        const {message} = this.props;
+        const {message, date} = this.props;
 
         return (
             <View style={UserMessage.styles.root}>
                 <View style={UserMessage.styles.messageContainer}>
                     <Text style={UserMessage.styles.messageText}>{message}</Text>
                 </View>
+                <Text style={{
+                    color:"indigo",
+                    paddingRight:20,
+                    fontSize:11
+                }}>
+                    {date}
+                </Text>
             </View>
         );
     }

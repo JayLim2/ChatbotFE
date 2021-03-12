@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import {Fab, Icon, Text} from 'native-base';
+import {Icon, Text} from 'native-base';
 
-import {CURRENT_CHAT_ACTIVITY, INDIGO} from "../../configuration/Constants";
+import {CURRENT_CHAT_ACTIVITY} from "../../configuration/Constants";
 import {withTranslation} from "react-i18next";
 import {getCurrentUserChats} from "../client/Client";
 import {Chat} from "../../models/Chat";
@@ -39,18 +39,16 @@ class ChatsList extends Component<any, any> {
             });
     }
 
-    onOpenChatClick() {
-        this.props.navigation.navigate(CURRENT_CHAT_ACTIVITY);
+    onOpenChatClick(chatId: number | undefined) {
+        this.props.navigation.navigate(CURRENT_CHAT_ACTIVITY, {
+            chatId: chatId
+        });
     }
 
     render(): React.ReactNode {
         const {t} = this.props;
         return (
-            <View style={{
-                height: "100%",
-                // padding: 20,
-                // paddingTop: 100
-            }}>
+            <View style={{height: "100%"}}>
                 {this.state.chats.map((chat: Chat) => {
                     // console.warn("Chat: ", JSON.stringify(chat));
                     return (
@@ -66,6 +64,8 @@ class ChatsList extends Component<any, any> {
                                   alignItems: "center",
                                   justifyContent: "flex-start"
                               }}
+                              data-chatId={chat.id}
+                              onTouchEnd={() => {this.onOpenChatClick(chat.id);}}
                         >
                             <View style={{
                                 width: 48,
@@ -87,14 +87,14 @@ class ChatsList extends Component<any, any> {
                                     fontSize: 18,
                                     color: "black"
                                 }}>
-                                    {`Чат № ${chat.id}`}
+                                    {`${t("chatsList:text.chatHeader")}${chat.id}`}
                                 </Text>
                                 <Text style={{
                                     fontSize: 14,
                                     color: "gray"
                                 }}>
                                     {!chat.messages || chat.messages.length === 0 ?
-                                        `Напишите первое сообщение.` :
+                                        t("chatsList:text.chatPlaceholder") :
                                         chat.messages[0].message
                                     }
                                 </Text>
@@ -110,16 +110,16 @@ class ChatsList extends Component<any, any> {
                 {/*    {t("chatsList:text.openChatPrompt")}*/}
                 {/*</Text>*/}
 
-                <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{}}
-                    style={{backgroundColor: INDIGO}}
-                    position="bottomRight"
-                    onPress={this.onOpenChatClick}
-                >
-                    <Icon type="MaterialCommunityIcons" name="pen"/>
-                </Fab>
+                {/*<Fab*/}
+                {/*    active={this.state.active}*/}
+                {/*    direction="up"*/}
+                {/*    containerStyle={{}}*/}
+                {/*    style={{backgroundColor: INDIGO}}*/}
+                {/*    position="bottomRight"*/}
+                {/*    onPress={this.onOpenChatClick}*/}
+                {/*>*/}
+                {/*    <Icon type="MaterialCommunityIcons" name="pen"/>*/}
+                {/*</Fab>*/}
             </View>
         );
     }

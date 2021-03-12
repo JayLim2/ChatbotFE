@@ -9,6 +9,7 @@ import {fetchFonts} from "../../configuration/Fonts";
 import {tryLogin} from "../client/Client";
 import {withTranslation} from "react-i18next";
 import {HttpError} from "../../models/HttpError";
+import {User} from "../../models/User";
 
 const statusNames: Map<number, string> = new Map();
 statusNames.set(-1, "unknown");
@@ -95,13 +96,13 @@ class LoginForm extends Component<any, any> {
 
         //validate credentials
         tryLogin(login, password)
-            .then(validationResponse => {
+            .then((user: User) => {
                 this.setState({
                     authenticating: false
                 });
 
                 //if authenticated - open "Home" page
-                if (validationResponse) {
+                if (user) {
                     this.props.navigation.navigate(HOME_ACTIVITY);
                 } else {
                     this.setState({

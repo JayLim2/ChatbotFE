@@ -5,7 +5,7 @@ import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Tit
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {fetchFonts} from "../../configuration/Fonts";
-import {getAllMessages, getCurrentUserChats, saveAllMessages} from "../client/Client";
+import {getChatMessages, saveMessage} from "../client/Client";
 import {openDatabase} from "../../services/DatabaseService";
 import * as SQLite from "expo-sqlite";
 import {SELECT_ALL_MESSAGES} from "../../queries/selectQueries";
@@ -15,6 +15,8 @@ import {MaterialIndicator} from "react-native-indicators";
 import {getCurrentDate} from "../utils/Utils";
 import {withTranslation} from "react-i18next";
 import {Message} from "../../models/Message";
+import {ErrorResponse} from "../../models/HttpError";
+import {LocalStorage} from "../utils/Storage";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -43,8 +45,15 @@ class CurrentChatActivity extends Component<any, any> {
     //database instance
     databaseInstance: SQLite.WebSQLDatabase;
 
-    constructor(props: object) {
+    private chatId: number | undefined;
+    private userId: number | undefined;
+
+    constructor(props: any) {
         super(props);
+
+        //get current chat id
+        const routeParams = props.route.params;
+        this.chatId = routeParams.chatId;
 
         //open database
         this.databaseInstance = openDatabase();
@@ -76,15 +85,15 @@ class CurrentChatActivity extends Component<any, any> {
 
         //other methods
         this.createMessage = this.createMessage.bind(this);
-        this.getTestAnswer = this.getTestAnswer.bind(this);
 
         //fetch messages
-        this.onLoadMessages();
+        this.onLoadMessages(Number(this.chatId));
     }
 
     async componentDidMount() {
         try {
             await fetchFonts();
+            this.userId = await LocalStorage.getData("userId");
         } catch (e) {
             console.warn(e);
         } finally {
@@ -129,17 +138,16 @@ class CurrentChatActivity extends Component<any, any> {
      * - tries load messages from local DB.
      *
      */
-    onLoadMessages() {
+    onLoadMessages(chatId: number) {
         //fetching of messages
-        getAllMessages()
-            .then(allUserMessages => { //if no problems with network
-                let messages: Message[] = allUserMessages;
+        getChatMessages(chatId)
+            .then((chatMessages: Message[]) => { //if no problems with network
                 //refresh state of messages
-                this.updateMessagesState(messages);
+                this.updateMessagesState(chatMessages);
                 //remove old data
-                this.deleteAllMessagesFromDB(); //TODO maybe delete by ids?
+                // this.deleteAllMessagesFromDB(); //TODO maybe delete by ids?
                 //try to insert into local DB
-                this.insertMessagesIntoDB(messages);
+                // this.insertMessagesIntoDB(chatMessages);
             })
             .catch(e => { //if any problems with network
                 this.fetchMessagesFromDB();
@@ -161,44 +169,41 @@ class CurrentChatActivity extends Component<any, any> {
      */
     onSendMessage() {
         const currentMessage = this.state.currentMessage;
-        const currentDate: string = getCurrentDate();
+
+        if (!currentMessage || currentMessage.trim() === "") {
+            return;
+        }
 
         //wrap messages as special object
-        let userMessage = this.createMessage(
-            currentMessage,
-            "USER",
-            currentDate
-        );
-        let systemMessage = this.createMessage(
-            this.getTestAnswer(userMessage),
-            "SYSTEM",
-            currentDate
-        );
+        let userMessage = this.createMessage(currentMessage);
 
         //save messages on server
-        saveAllMessages([userMessage, systemMessage])
-            .then(result => {
-                //result - error message or JsonArray with messages ids
-                if (typeof result === "object") {
-                    this.clearCurrentMessage();
-                    this.enableLoader(true);
-                    this.onLoadMessages();
-                }
+        //TODO неоптимизированно
+        saveMessage(userMessage)
+            .then((systemMessage: Message) => {
+                this.clearCurrentMessage();
+                this.enableLoader(true);
+                this.onLoadMessages(Number(this.chatId));
             })
-        //------------------------------------
+            .catch((error: ErrorResponse) => {
+                console.error("Couldn't save message, caused by: ", error);
+            })
     }
 
     /**
-     * Wrap message data by MessageProps object
+     * Wrap message data by Message object
      * @param message
-     * @param userId
-     * @param date
      */
-    createMessage(message: string, userId: string, date: string) {
+    createMessage(message: string) {
         let messageObj: Message = {
             message: message,
-            userId: userId,
-            date: date
+            user: {
+                id: this.userId
+            },
+            chat: {
+                id: this.chatId
+            },
+            dateTime: getCurrentDate()
         };
         return messageObj;
     }
@@ -215,36 +220,6 @@ class CurrentChatActivity extends Component<any, any> {
      */
     onReturnBack() {
         this.props.navigation.goBack();
-    }
-
-    /**
-     * Get hardcoded message by user message text
-     * @param userMessage
-     */
-    getTestAnswer(userMessage: Message) {
-        let message = userMessage.message;
-        if (message) {
-            message = message.trim().toLowerCase();
-        }
-        let answer;
-        switch (message) {
-            case "hello":
-                answer = "Hello, " + userMessage.userId;
-                break;
-            case "hi":
-                answer = "Hi, bro :)";
-                break;
-            case "it's good weather today":
-                answer = "But I don't like...";
-                break;
-            case "bye":
-                answer = "See you later!";
-                break;
-            default:
-                //answer = "Kill. All. Humans.";
-                answer = "Sorry, I have a headache.";
-        }
-        return answer;
     }
 
     /* ############ DATABASE METHODS ################### */
@@ -301,8 +276,10 @@ class CurrentChatActivity extends Component<any, any> {
                 let message: Message = {
                     id: currentRow._id,
                     message: currentRow.message,
-                    userId: currentRow.userId,
-                    date: currentRow.date
+                    user: {
+                        id: currentRow.userId
+                    },
+                    dateTime: currentRow.date
                 };
                 messages.push(message);
             }
@@ -355,7 +332,9 @@ class CurrentChatActivity extends Component<any, any> {
         const {t} = this.props;
         let chatNode = !isMessagesLoadingComplete ?
             <MaterialIndicator color={INDIGO} style={{marginTop: 100}}/> :
-            <CurrentChat messages={messages} navigation={navigation}/>;
+            <CurrentChat messages={messages}
+                         navigation={navigation}
+            />;
 
         return (
             <Container>
@@ -387,7 +366,9 @@ class CurrentChatActivity extends Component<any, any> {
                         />
                     </View>
                     <View style={CurrentChatActivity.styles.footerSend}>
-                        <Button style={CurrentChatActivity.styles.sendButton} onPress={this.onSendMessage}>
+                        <Button style={CurrentChatActivity.styles.sendButton}
+                                onPress={this.onSendMessage}
+                        >
                             <Icon type="MaterialCommunityIcons" name="send"/>
                         </Button>
                     </View>

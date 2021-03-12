@@ -32,13 +32,20 @@ class SystemMessage extends Component<any, any> {
     }
 
     render(): React.ReactNode {
-        const {message} = this.props;
+        const {message, date} = this.props;
 
         return (
             <View style={SystemMessage.styles.root}>
                 <View style={SystemMessage.styles.messageContainer}>
                     <Text style={SystemMessage.styles.messageText}>{message}</Text>
                 </View>
+                <Text style={{
+                    color:"gray",
+                    paddingLeft:20,
+                    fontSize:11
+                }}>
+                    {date}
+                </Text>
             </View>
         );
     }

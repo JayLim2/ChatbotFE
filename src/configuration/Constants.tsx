@@ -2,6 +2,7 @@
 export const NO_CONNECTION = "No connection.";
 
 //Routes names
+export const SPLASH_SCREEN = "SplashScreen";
 export const LOGIN_ACTIVITY = "Login";
 export const HOME_ACTIVITY = "Home";
 export const CURRENT_CHAT_ACTIVITY = "CurrentChat";

@@ -8,9 +8,9 @@ export const getCurrentDate = () => {
     return date.format(DATE_TIME_PATTERN);
 }
 
-export const handleResponse = (response: Response, url?: string): Promise<any> | never => {
+export const handleResponse = (response: Response, url?: string, noJson: boolean = false): Promise<any> | never => {
     if (response.ok) {
-        return response.json();
+        return noJson ? response.text() : response.json();
     } else {
         const errorTexts: {[index: number]: string} = {
             400: `Bad request`,

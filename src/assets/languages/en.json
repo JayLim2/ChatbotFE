@@ -1,4 +1,7 @@
 {
+  "splash": {
+    "appTitle": "Chatbot AI"
+  },
   "login": {
     "title": "Login",
     "buttons": {
@@ -30,7 +33,9 @@
   "chatsList": {
     "title": "Interlocutor",
     "text": {
-      "openChatPrompt": "Click on button in right bottom corner to open chat."
+      "openChatPrompt": "Click on button in right bottom corner to open chat.",
+      "chatHeader": "Chat № ",
+      "chatPlaceholder": "Write first message."
     }
   },
   "chat": {
@@ -39,6 +44,7 @@
       "input": {
         "placeholder": "Input message"
       }
-    }
+    },
+    "noMessagesPrompt": "This chat is empty.\n\nWrite first message!"
   }
 }

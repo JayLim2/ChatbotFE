@@ -10,8 +10,15 @@ import SettingsActivity from "./src/components/settings/SettingsActivity";
 import {openDatabase} from "./src/services/DatabaseService";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
 import * as SQLite from "expo-sqlite";
-import {LOGIN_ACTIVITY, HOME_ACTIVITY, CURRENT_CHAT_ACTIVITY, SETTINGS_ACTIVITY} from "./src/configuration/Constants"
+import {
+    LOGIN_ACTIVITY,
+    HOME_ACTIVITY,
+    CURRENT_CHAT_ACTIVITY,
+    SETTINGS_ACTIVITY,
+    SPLASH_SCREEN
+} from "./src/configuration/Constants"
 import "assets/i18nx"
+import SplashScreen from "./src/components/splash/SplashScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +46,6 @@ const initialize = () => {
     let databaseInstance = openDatabase();
     //create table 'Messages'
     createMessagesTable(databaseInstance);
-    //get auth token from AsyncStorage
 }
 
 const App = () => {
@@ -49,6 +55,7 @@ const App = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator headerMode={"none"}>
+                <Stack.Screen name={SPLASH_SCREEN} component={SplashScreen}/>
                 <Stack.Screen name={LOGIN_ACTIVITY} component={LoginActivity}/>
                 <Stack.Screen name={HOME_ACTIVITY} component={ChatsActivity}/>
                 <Stack.Screen name={CURRENT_CHAT_ACTIVITY} component={CurrentChatActivity}/>
