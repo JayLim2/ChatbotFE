@@ -54,6 +54,11 @@
       "registerButton": "Зарегистрироваться"
     },
     "messages": {
+      "emptyLogin": "Введите логин",
+      "emptyPassword": "Введите пароль",
+      "emptyRepeatPassword": "Повторите пароль",
+      "emptyEmail": "Введите e-mail",
+      "passwordsMismatch": "Пароли не совпадают",
       "alreadyExists": "Пользователь с таким логином или e-mail уже есть"
     }
   },

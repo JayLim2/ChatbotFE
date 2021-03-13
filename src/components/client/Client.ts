@@ -11,7 +11,7 @@ import {
     USERS_API_LINK
 } from "../../configuration/ServerProperties";
 import {handleError, handleResponse} from "../utils/Utils";
-import {ErrorResponse} from "../../models/HttpError";
+import {ErrorResponse, HttpError} from "../../models/HttpError";
 import {encode} from 'base-64'
 import {Message} from "../../models/Message";
 import {Chat} from "../../models/Chat";
@@ -128,6 +128,71 @@ export const getChatMessages = async (chatId: number) => {
         return handleResponse(response, url);
     }).then((messages: Message[]) => {
         return messages;
+    }).catch((error: any) => {
+        throw handleError(error);
+    })
+}
+
+export const registerUser = (login: string, password: string,
+                             repeatPassword: string, email: string) => {
+
+    const url = `${USERS_API_LINK}/register`;
+
+    let httpError: HttpError;
+
+    if (!login || login.trim() === "") {
+        httpError = new HttpError();
+        httpError.status = 1;
+        httpError.message = "emptyLogin";
+        throw httpError;
+    }
+
+    if (!password || password.trim() === "") {
+        httpError = new HttpError();
+        httpError.status = 1;
+        httpError.message = "emptyPassword";
+        throw httpError;
+    }
+
+    if (!repeatPassword || repeatPassword.trim() === "") {
+        httpError = new HttpError();
+        httpError.status = 1;
+        httpError.message = "emptyRepeatPassword";
+        throw httpError;
+    }
+
+    if (password !== repeatPassword) {
+        httpError = new HttpError();
+        httpError.status = 1;
+        httpError.message = "passwordsMismatch";
+        throw httpError;
+    }
+
+    if (!email || email.trim() === "") {
+        httpError = new HttpError();
+        httpError.status = 1;
+        httpError.message = "emptyEmail";
+        throw httpError;
+    }
+
+    const user: User = new User();
+    user.login = login;
+    user.passwordHash = password;
+    user.email = email;
+
+    return fetch(
+        url,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+    ).then((response: Response) => {
+        return handleResponse(response, url);
+    }).then((registeredUser: User) => {
+        return registeredUser;
     }).catch((error: any) => {
         throw handleError(error);
     })

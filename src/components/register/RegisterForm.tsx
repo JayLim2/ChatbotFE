@@ -2,18 +2,13 @@ import React, {Component} from "react";
 import {withTranslation} from "react-i18next";
 import {Platform, StyleSheet, View} from "react-native";
 import {MaterialIndicator} from "react-native-indicators";
-import {INDIGO} from "../../configuration/Constants";
+import {INDIGO, LOGIN_ACTIVITY} from "../../configuration/Constants";
 import ErrorMessage from "../utils/ErrorMessage";
 import {Button, Text} from "native-base";
 import {Input} from "react-native-elements";
-
-const statusNames: Map<number, string> = new Map();
-statusNames.set(-1, "unknown");
-statusNames.set(0, "noConnection");
-statusNames.set(401, "invalidCredentials");
-statusNames.set(404, "notFound");
-statusNames.set(405, "alreadyExists");
-statusNames.set(500, "internalError");
+import {registerUser} from "../client/Client";
+import {User} from "../../models/User";
+import {ErrorHandling} from "../utils/ErrorHandlingConfigs";
 
 class RegisterForm extends Component<any, any> {
 
@@ -44,10 +39,10 @@ class RegisterForm extends Component<any, any> {
         this.state = {
             registerInProgress: false,
             registerResponse: null,
-            login: "",
-            password: "",
-            repeatPassword: "",
-            email: ""
+            login: "JayLim",
+            password: "1234",
+            repeatPassword: "1234",
+            email: "shockshadow@yandex.ru"
         };
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
@@ -90,8 +85,36 @@ class RegisterForm extends Component<any, any> {
         })
     }
 
-    onRegister() {
+    async onRegister() {
+        const {login, password, repeatPassword, email} = this.state;
 
+        this.setState({
+            registerInProgress: true,
+            registerResponse: null
+        });
+        try {
+            const registeredUser: User = await registerUser(login, password, repeatPassword, email);
+            if (registeredUser.id) {
+                this.setState({
+                    registerInProgress: false,
+                    registerResponse: null
+                });
+                this.props.navigation.navigate(LOGIN_ACTIVITY);
+            } else {
+                this.setState({
+                    registerInProgress: false,
+                    registerResponse: {
+                        status: 1,
+                        message: "alreadyExists"
+                    }
+                });
+            }
+        } catch (error) {
+            this.setState({
+                registerInProgress: false,
+                registerResponse: error
+            });
+        }
     }
 
     render() {
@@ -105,9 +128,10 @@ class RegisterForm extends Component<any, any> {
         //Get authentication result message
         let message = null;
         if (!registerInProgress && registerResponse) {
-            const statusCode = registerResponse.status !== undefined ? registerResponse.status : -1;
-            const pathToComponent = [404, 405].includes(statusCode) ? "register" : "common";
-            const pathToMessage = statusNames.get(statusCode);
+            const statusAlias = ErrorHandling.getStatusAlias(registerResponse.status);
+            const isCustomStatus: boolean = statusAlias === "custom";
+            const pathToComponent = isCustomStatus ? "register" : "common";
+            const pathToMessage = isCustomStatus ? registerResponse.message : statusAlias;
             message = <ErrorMessage message={t(`${pathToComponent}:messages.${pathToMessage}`)}/>;
         }
 
@@ -126,6 +150,7 @@ class RegisterForm extends Component<any, any> {
                             name: 'user'
                         }}
                                onChangeText={this.onInputLogin}
+                               defaultValue={this.state.login}
                         />
                         <Text>{t("register:fields.password.label")}</Text>
                         <Input leftIcon={{
@@ -133,6 +158,7 @@ class RegisterForm extends Component<any, any> {
                             name: 'lock'
                         }}
                                onChangeText={this.onInputPassword}
+                               defaultValue={this.state.password}
                         />
                         <Text>{t("register:fields.repeatPassword.label")}</Text>
                         <Input leftIcon={{
@@ -140,6 +166,7 @@ class RegisterForm extends Component<any, any> {
                             name: 'lock'
                         }}
                                onChangeText={this.onInputRepeatPassword}
+                               defaultValue={this.state.repeatPassword}
                         />
                         <Text>{t("register:fields.email.label")}</Text>
                         <Input leftIcon={{
@@ -147,6 +174,7 @@ class RegisterForm extends Component<any, any> {
                             name: 'email'
                         }}
                                onChangeText={this.onInputEmail}
+                               defaultValue={this.state.email}
                         />
                         <Button full
                                 onPress={this.onRegister}

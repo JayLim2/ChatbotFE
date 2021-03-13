@@ -54,6 +54,11 @@
       "registerButton": "Register"
     },
     "messages": {
+      "emptyLogin": "Login is required",
+      "emptyPassword": "Password is required",
+      "emptyRepeatPassword": "Repeat of password is required",
+      "emptyEmail": "E-mail is required",
+      "passwordsMismatch": "Password doesn't match with repeat password",
       "alreadyExists": "User with such login or e-mail is already exists"
     }
   },
