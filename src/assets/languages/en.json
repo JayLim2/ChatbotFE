@@ -1,11 +1,21 @@
 {
+  "common": {
+    "messages": {
+      "wait": "Please, wait...",
+      "unknown": "Unknown error",
+      "noConnection": "No connection",
+      "notFound": "Resource not found"
+    }
+  },
   "splash": {
     "appTitle": "Chatbot AI"
   },
   "login": {
     "title": "Login",
     "buttons": {
-      "signIn": "Sign In"
+      "signIn": "Sign In",
+      "register": "Register",
+      "forgetPassword": "Forget password?"
     },
     "fields": {
       "login": {
@@ -20,8 +30,45 @@
     "messages": {
       "unknown": "Unknown error",
       "invalidCredentials": "Invalid login or password",
-      "wait": "Please wait...",
-      "noConnection": "No connection."
+      "wait": "Wait...",
+      "noConnection": "No connection"
+    }
+  },
+  "register": {
+    "title": "Register",
+    "fields": {
+      "login": {
+        "label": "Login:"
+      },
+      "password": {
+        "label": "Password:"
+      },
+      "repeatPassword": {
+        "label": "Repeat password:"
+      },
+      "email": {
+        "label": "E-mail:"
+      }
+    },
+    "buttons": {
+      "registerButton": "Register"
+    },
+    "messages": {
+      "alreadyExists": "User with such login or e-mail is already exists"
+    }
+  },
+  "forgetPassword": {
+    "title": "Forget password",
+    "fields": {
+      "email": {
+        "label": "Your account e-mail:"
+      }
+    },
+    "buttons": {
+      "resetButton": "Reset password"
+    },
+    "messages": {
+      "notFound": "No user with this e-mail"
     }
   },
   "settings": {

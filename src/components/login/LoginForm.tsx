@@ -4,7 +4,13 @@ import {Button, Text} from 'native-base';
 import {Input} from 'react-native-elements';
 import {MaterialIndicator} from 'react-native-indicators';
 import ErrorMessage from "../utils/ErrorMessage";
-import {HOME_ACTIVITY, INDIGO,} from "../../configuration/Constants";
+import {
+    FORGET_PASSWORD_ACTIVITY,
+    HOME_ACTIVITY,
+    INDIGO,
+    REGISTER_ACTIVITY,
+    WHITE,
+} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
 import {tryLogin} from "../client/Client";
 import {withTranslation} from "react-i18next";
@@ -17,13 +23,13 @@ statusNames.set(0, "noConnection");
 statusNames.set(401, "invalidCredentials");
 statusNames.set(500, "internalError");
 
-type AuthResponseType = 'ok' | 'failed';
+type HttpResponseType = 'ok' | 'failed';
 
-class AuthResponse {
-    type: AuthResponseType;
+class HttpResponse {
+    type: HttpResponseType;
     status?: number;
 
-    constructor(type: AuthResponseType,
+    constructor(type: HttpResponseType,
                 status?: number) {
 
         this.type = type;
@@ -68,6 +74,8 @@ class LoginForm extends Component<any, any> {
         }
 
         //event handlers
+        this.onRegister = this.onRegister.bind(this);
+        this.onForgetPassword = this.onForgetPassword.bind(this);
         this.onLogin = this.onLogin.bind(this);
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
@@ -83,6 +91,14 @@ class LoginForm extends Component<any, any> {
                 isLoadingComplete: true
             });
         }
+    }
+
+    onRegister() {
+        this.props.navigation.navigate(REGISTER_ACTIVITY);
+    }
+
+    onForgetPassword() {
+        this.props.navigation.navigate(FORGET_PASSWORD_ACTIVITY);
     }
 
     onLogin() {
@@ -106,7 +122,7 @@ class LoginForm extends Component<any, any> {
                     this.props.navigation.navigate(HOME_ACTIVITY);
                 } else {
                     this.setState({
-                        authResponse: new AuthResponse('failed', 401)
+                        authResponse: new HttpResponse('failed', 401)
                     });
                 }
 
@@ -122,7 +138,7 @@ class LoginForm extends Component<any, any> {
                 console.error("Error during authentication: ", error);
                 this.setState({
                     authenticating: false,
-                    authResponse: new AuthResponse('failed', error.status)
+                    authResponse: new HttpResponse('failed', error.status)
                 })
             })
     }
@@ -155,7 +171,7 @@ class LoginForm extends Component<any, any> {
         }
 
         const authenticating: boolean = this.state.authenticating;
-        const authResponse: AuthResponse = this.state.authResponse;
+        const authResponse: HttpResponse = this.state.authResponse;
 
         const {t} = this.props;
 
@@ -203,6 +219,29 @@ class LoginForm extends Component<any, any> {
                         >
                             <Text>{t("login:buttons.signIn")}</Text>
                         </Button>
+                        <Button full onPress={this.onRegister}
+                                style={{
+                                    backgroundColor: WHITE,
+                                    borderColor: INDIGO,
+                                    borderWidth: 2,
+                                    marginTop: 10
+                                }}
+                        >
+                            <Text style={{color: INDIGO}}>
+                                {t("login:buttons.register")}
+                            </Text>
+                        </Button>
+                        <Text style={{
+                            marginTop: 20,
+                            color: INDIGO,
+                            fontSize: 14,
+                            textDecorationLine: "underline",
+                            textAlign: "center"
+                        }}
+                              onPress={this.onForgetPassword}
+                        >
+                            {t("login:buttons.forgetPassword")}
+                        </Text>
                     </View>
                 }
             </View>

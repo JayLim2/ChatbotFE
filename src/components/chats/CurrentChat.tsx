@@ -72,7 +72,7 @@ class CurrentChat extends React.Component<any, any> {
         return (
             <ScrollView
                 ref={ref => this.scrollView = ref}
-                style={{paddingTop: 10}}
+                style={{paddingVertical: 10}}
             >
                 {messagesItems.length > 0 ?
                     messagesItems :

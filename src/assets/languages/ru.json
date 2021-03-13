@@ -1,11 +1,21 @@
 {
+  "common": {
+    "messages": {
+      "wait": "Ждите...",
+      "unknown": "Неизвестная ошибка",
+      "noConnection": "Нет сети",
+      "notFound": "Ресурс не найден"
+    }
+  },
   "splash": {
     "appTitle": "Чат-бот ИИ"
   },
   "login": {
     "title": "Вход",
     "buttons": {
-      "signIn": "Войти"
+      "signIn": "Войти",
+      "register": "Зарегистрироваться",
+      "forgetPassword": "Забыли пароль?"
     },
     "fields": {
       "login": {
@@ -20,8 +30,45 @@
     "messages": {
       "unknown": "Неизвестная ошибка",
       "invalidCredentials": "Неправильный логин или пароль",
-      "wait": "Пожалуйста, подождите...",
-      "noConnection": "Отсутствует подключение."
+      "wait": "Ждите...",
+      "noConnection": "Нет сети"
+    }
+  },
+  "register": {
+    "title": "Регистрация",
+    "fields": {
+      "login": {
+        "label": "Логин:"
+      },
+      "password": {
+        "label": "Пароль:"
+      },
+      "repeatPassword": {
+        "label": "Повторите пароль:"
+      },
+      "email": {
+        "label": "E-mail:"
+      }
+    },
+    "buttons": {
+      "registerButton": "Зарегистрироваться"
+    },
+    "messages": {
+      "alreadyExists": "Пользователь с таким логином или e-mail уже есть"
+    }
+  },
+  "forgetPassword": {
+    "title": "Сброс пароля",
+    "fields": {
+      "email": {
+        "label": "E-mail вашего аккаунта:"
+      }
+    },
+    "buttons": {
+      "resetButton": "Сбросить пароль"
+    },
+    "messages": {
+      "notFound": "E-mail не найден"
     }
   },
   "settings": {

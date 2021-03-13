@@ -6,7 +6,7 @@ import {fetchFonts} from "../../configuration/Fonts";
 import i18n from "assets/i18nx";
 import {withTranslation} from "react-i18next";
 
-const LoginActivity = ({navigation}) => {
+const LoginActivity = ({navigation}: Readonly<any>) => {
 
     //##################### INITIALIZE ##########################
     const [isLoadingComplete, setLoadingComplete] = useState(false);

@@ -11,14 +11,18 @@ import {openDatabase} from "./src/services/DatabaseService";
 import {CREATE_MESSAGES_TABLE} from "./src/queries/createQueries";
 import * as SQLite from "expo-sqlite";
 import {
-    LOGIN_ACTIVITY,
-    HOME_ACTIVITY,
     CURRENT_CHAT_ACTIVITY,
+    FORGET_PASSWORD_ACTIVITY,
+    HOME_ACTIVITY,
+    LOGIN_ACTIVITY,
+    REGISTER_ACTIVITY,
     SETTINGS_ACTIVITY,
     SPLASH_SCREEN
 } from "./src/configuration/Constants"
 import "assets/i18nx"
 import SplashScreen from "./src/components/splash/SplashScreen";
+import RegisterActivity from "./src/components/register/RegisterActivity";
+import ForgetPasswordActivity from "./src/components/forget-password/ForgetPasswordActivity";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +61,8 @@ const App = () => {
             <Stack.Navigator headerMode={"none"}>
                 <Stack.Screen name={SPLASH_SCREEN} component={SplashScreen}/>
                 <Stack.Screen name={LOGIN_ACTIVITY} component={LoginActivity}/>
+                <Stack.Screen name={REGISTER_ACTIVITY} component={RegisterActivity}/>
+                <Stack.Screen name={FORGET_PASSWORD_ACTIVITY} component={ForgetPasswordActivity}/>
                 <Stack.Screen name={HOME_ACTIVITY} component={ChatsActivity}/>
                 <Stack.Screen name={CURRENT_CHAT_ACTIVITY} component={CurrentChatActivity}/>
                 <Stack.Screen name={SETTINGS_ACTIVITY} component={SettingsActivity}/>
