@@ -39,10 +39,10 @@ class RegisterForm extends Component<any, any> {
         this.state = {
             registerInProgress: false,
             registerResponse: null,
-            login: "JayLim",
-            password: "1234",
-            repeatPassword: "1234",
-            email: "shockshadow@yandex.ru"
+            login: "",
+            password: "",
+            repeatPassword: "",
+            email: ""
         };
         this.onInputLogin = this.onInputLogin.bind(this);
         this.onInputPassword = this.onInputPassword.bind(this);
@@ -157,6 +157,7 @@ class RegisterForm extends Component<any, any> {
                             type: 'material',
                             name: 'lock'
                         }}
+                               secureTextEntry={true}
                                onChangeText={this.onInputPassword}
                                defaultValue={this.state.password}
                         />
@@ -165,6 +166,7 @@ class RegisterForm extends Component<any, any> {
                             type: 'material',
                             name: 'lock'
                         }}
+                               secureTextEntry={true}
                                onChangeText={this.onInputRepeatPassword}
                                defaultValue={this.state.repeatPassword}
                         />

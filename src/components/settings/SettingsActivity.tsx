@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
-import {Body, Button, Container, Content, Header, Icon, Left, Right, Title} from "native-base";
+import {Button, Container, Content} from "native-base";
 import images from "assets/images";
 import i18n from "assets/i18nx";
 import {fetchFonts} from "../../configuration/Fonts";
-import {INDIGO} from "../../configuration/Constants";
 import {withTranslation} from "react-i18next";
 import ActivityHeader from "../common/ActivityHeader";
+import ChangeConfigsForm from "./ChangeConfigsForm";
 
 class SettingsActivity extends Component<any, any> {
 
@@ -98,6 +98,11 @@ class SettingsActivity extends Component<any, any> {
                                 <Image style={SettingsActivity.styles.languageIcon} source={images.languages.en}/>
                             </Button>
                         </View>
+                    </View>
+                    <View style={{
+                        padding: 20
+                    }}>
+                        <ChangeConfigsForm navigation={this.props.navigation} />
                     </View>
                 </Content>
             </Container>
