@@ -180,6 +180,8 @@ export const registerUser = (login: string, password: string,
     user.passwordHash = password;
     user.email = email;
 
+    const token = getAuthorizationToken(login, password);
+
     return fetch(
         url,
         {
@@ -191,7 +193,10 @@ export const registerUser = (login: string, password: string,
         }
     ).then((response: Response) => {
         return handleResponse(response, url);
-    }).then((registeredUser: User) => {
+    }).then(async (registeredUser: User) => {
+        if (registeredUser.id) {
+            await LocalStorage.storeData("token", token);
+        }
         return registeredUser;
     }).catch((error: any) => {
         throw handleError(error);

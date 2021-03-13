@@ -18,4 +18,12 @@ export class LocalStorage {
         }
     }
 
+    public static async clearData(key: string): Promise<any> {
+        try {
+            return AsyncStorage.removeItem(key);
+        } catch (e) {
+            console.error("Async removing from store error: ", e);
+        }
+    }
+
 }

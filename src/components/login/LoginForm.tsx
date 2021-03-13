@@ -104,6 +104,10 @@ class LoginForm extends Component<any, any> {
     onLogin() {
         const {login, password} = this.state;
 
+        if (login.trim() === "" || password.trim() === "") {
+            return;
+        }
+
         //start authentication
         this.setState({
             authenticating: true,
