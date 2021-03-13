@@ -6,6 +6,7 @@ import i18n from "assets/i18nx";
 import {fetchFonts} from "../../configuration/Fonts";
 import {INDIGO} from "../../configuration/Constants";
 import {withTranslation} from "react-i18next";
+import ActivityHeader from "../common/ActivityHeader";
 
 class SettingsActivity extends Component<any, any> {
 
@@ -83,28 +84,18 @@ class SettingsActivity extends Component<any, any> {
 
         return (
             <Container>
-                <Header style={{backgroundColor: INDIGO}}
-                        androidStatusBarColor={INDIGO}
-                >
-                    <Left>
-                        <Button transparent onPress={this.onReturnBack}>
-                            <Icon name='arrow-back'/>
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>{t("settings:title")}</Title>
-                    </Body>
-                    <Right/>
-                </Header>
+                <ActivityHeader navigation={this.props.navigation}
+                                name={"settings"}
+                />
                 <Content contentContainerStyle={{flexGrow: 1}}>
                     <View style={SettingsActivity.styles.root}>
                         <Text style={SettingsActivity.styles.text}>{t("settings:buttons.changeLanguageTittle")}</Text>
                         <View style={SettingsActivity.styles.languages}>
                             <Button transparent onPress={this.onSelectRussianLanguage}>
-                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.ru} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.ru}/>
                             </Button>
                             <Button transparent onPress={this.onSelectEnglishLanguage}>
-                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.en} />
+                                <Image style={SettingsActivity.styles.languageIcon} source={images.languages.en}/>
                             </Button>
                         </View>
                     </View>

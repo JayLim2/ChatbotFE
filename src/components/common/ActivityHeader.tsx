@@ -22,13 +22,14 @@ const ActivityHeader = ({navigation, name, t}: Readonly<any>) => {
     const left: React.ReactNode[] = [];
     const right: React.ReactNode[] = [];
 
-    right.push(
-        <Button transparent onPress={onOpenSettings}>
-            <Icon name='settings'/>
-        </Button>
-    );
-
     const unauthorizedActivities: string[] = ["login", "register", "forgetPassword"];
+    if (name !== "settings") {
+        right.push(
+            <Button transparent onPress={onOpenSettings}>
+                <Icon name='settings'/>
+            </Button>
+        );
+    }
     if (name !== "login") {
         left.push(
             <Button transparent onPress={onReturnBack}>
@@ -36,7 +37,7 @@ const ActivityHeader = ({navigation, name, t}: Readonly<any>) => {
             </Button>
         );
     }
-    if (!unauthorizedActivities.includes(name)) {
+    if (!unauthorizedActivities.includes(name)) { //TODO check auth token in LocalStorage
         right.push(
             <Button transparent onPress={onLogout}>
                 <Icon name='exit'/>

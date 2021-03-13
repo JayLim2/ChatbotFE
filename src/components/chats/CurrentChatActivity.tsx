@@ -17,6 +17,7 @@ import {withTranslation} from "react-i18next";
 import {Message} from "../../models/Message";
 import {ErrorResponse} from "../../models/HttpError";
 import {LocalStorage} from "../utils/Storage";
+import ActivityHeader from "../common/ActivityHeader";
 
 class CurrentChatActivity extends Component<any, any> {
 
@@ -338,23 +339,9 @@ class CurrentChatActivity extends Component<any, any> {
 
         return (
             <Container>
-                <Header style={{backgroundColor: INDIGO}}
-                        androidStatusBarColor={INDIGO}
-                >
-                    <Left>
-                        <Button transparent onPress={this.onReturnBack}>
-                            <Icon name='arrow-back'/>
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>{t("chat:title")}</Title>
-                    </Body>
-                    <Right>
-                        <Button transparent onPress={this.onClickMenu}>
-                            <Icon name='settings'/>
-                        </Button>
-                    </Right>
-                </Header>
+                <ActivityHeader navigation={navigation}
+                                name={"chat"}
+                />
                 <Content>
                     {chatNode}
                 </Content>
