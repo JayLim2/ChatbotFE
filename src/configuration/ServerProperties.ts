@@ -10,3 +10,5 @@ export const USERS_API_LINK = `${API_LINK}/user`;
 export const MESSAGES_API_LINK = `${API_LINK}/message`;
 export const CHATS_API_LINK = `${API_LINK}/chat`;
 export const HEALTH_CHECK_API_LINK = `${API_LINK}/hc`;
+export const TOPICS_API_LINK = `${API_LINK}/topic`;
+export const CONFIGS_API_LINK = `${API_LINK}/config`;

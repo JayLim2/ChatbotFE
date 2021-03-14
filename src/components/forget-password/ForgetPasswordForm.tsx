@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 import {withTranslation} from "react-i18next";
 import {Platform, StyleSheet, View} from "react-native";
 import {Button, Text} from "native-base";
@@ -38,7 +38,7 @@ class ForgetPasswordForm extends Component<any, any> {
         }
     });
 
-    constructor(props: Readonly<any>) {
+    constructor(props: any) {
         super(props);
         this.state = {
             resetInProgress: false,
@@ -68,7 +68,7 @@ class ForgetPasswordForm extends Component<any, any> {
             <MaterialIndicator color={INDIGO}/> : null;
 
         //Get authentication result message
-        let message = null;
+        let message: ReactNode = null;
         if (!resetInProgress && resetResponse) {
             const statusCode = resetResponse.status !== undefined ? resetResponse.status : -1;
             const pathToComponent = [404].includes(statusCode) ? "forgetPassword" : "common";
@@ -87,9 +87,9 @@ class ForgetPasswordForm extends Component<any, any> {
                     <View style={ForgetPasswordForm.styles.container}>
                         <Text>{t("forgetPassword:fields.email.label")}</Text>
                         <Input leftIcon={{
-                                   type: 'material',
-                                   name: 'email'
-                               }}
+                            type: 'material',
+                            name: 'email'
+                        }}
                                onChangeText={this.onInputEmail}
                         />
                         <Button full

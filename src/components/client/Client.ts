@@ -7,7 +7,7 @@
 import {
     CHATS_API_LINK,
     HEALTH_CHECK_API_LINK,
-    MESSAGES_API_LINK,
+    MESSAGES_API_LINK, TOPICS_API_LINK,
     USERS_API_LINK
 } from "../../configuration/ServerProperties";
 import {handleError, handleResponse} from "../utils/Utils";
@@ -17,6 +17,7 @@ import {Message} from "../../models/Message";
 import {Chat} from "../../models/Chat";
 import {LocalStorage} from "../utils/Storage";
 import {User} from "../../models/User";
+import {Topic} from "../../models/Topic";
 
 const getAuthorizationToken = (login: string, password: string) => {
     return encode(`${login}:${password}`);
@@ -198,6 +199,28 @@ export const registerUser = (login: string, password: string,
             await LocalStorage.storeData("token", token);
         }
         return registeredUser;
+    }).catch((error: any) => {
+        throw handleError(error);
+    })
+}
+
+export const getTopics = async () => {
+    const url = `${TOPICS_API_LINK}/get/all`;
+    const token = await LocalStorage.getData("token");
+
+    return fetch(
+        url,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${token}`
+            }
+        }
+    ).then((response: Response) => {
+        return handleResponse(response, url);
+    }).then((topics: Topic[]) => {
+        return topics;
     }).catch((error: any) => {
         throw handleError(error);
     })

@@ -4,7 +4,7 @@ import React from "react";
 import {LocalStorage} from "../utils/Storage";
 import {withTranslation} from "react-i18next";
 
-const ActivityHeader = ({navigation, name, t}: Readonly<any>) => {
+const ActivityHeader = ({navigation, name, t}: any) => {
 
     const onReturnBack = () => {
         navigation.goBack();
@@ -49,21 +49,11 @@ const ActivityHeader = ({navigation, name, t}: Readonly<any>) => {
         <Header style={{backgroundColor: INDIGO}}
                 androidStatusBarColor={INDIGO}
         >
-            {left.length > 0 ?
-                <Left>
-                    {left.map(node => {
-                        return node;
-                    })}
-                </Left> : null}
+            {left.length > 0 ? <Left>{left}</Left> : null}
             <Body>
                 <Title>{t(`${name}:title`)}</Title>
             </Body>
-            {right.length > 0 ?
-                <Right>
-                    {right.map(node => {
-                        return node;
-                    })}
-                </Right> : null}
+            {right.length > 0 ? <Right>{right}</Right> : null}
         </Header>
     )
 }

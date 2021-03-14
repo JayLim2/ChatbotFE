@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 import {withTranslation} from "react-i18next";
 import {Platform, StyleSheet, View} from "react-native";
 import {MaterialIndicator} from "react-native-indicators";
@@ -34,7 +34,7 @@ class RegisterForm extends Component<any, any> {
         }
     });
 
-    constructor(props: Readonly<any>) {
+    constructor(props: any) {
         super(props);
         this.state = {
             registerInProgress: false,
@@ -126,7 +126,7 @@ class RegisterForm extends Component<any, any> {
             <MaterialIndicator color={INDIGO}/> : null;
 
         //Get authentication result message
-        let message = null;
+        let message: ReactNode = null;
         if (!registerInProgress && registerResponse) {
             const statusAlias = ErrorHandling.getStatusAlias(registerResponse.status);
             const isCustomStatus: boolean = statusAlias === "custom";

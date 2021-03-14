@@ -10,7 +10,7 @@ import {ErrorResponse} from "../../models/HttpError";
 
 class ChatsList extends Component<any, any> {
 
-    constructor(props: Readonly<any>) {
+    constructor(props: any) {
         super(props);
         this.state = {
             active: true,
@@ -102,24 +102,6 @@ class ChatsList extends Component<any, any> {
                         </View>
                     );
                 })}
-                {/*<Text style={{*/}
-                {/*    fontSize: 18,*/}
-                {/*    color: "gray",*/}
-                {/*    textAlign: "center"*/}
-                {/*}}>*/}
-                {/*    {t("chatsList:text.openChatPrompt")}*/}
-                {/*</Text>*/}
-
-                {/*<Fab*/}
-                {/*    active={this.state.active}*/}
-                {/*    direction="up"*/}
-                {/*    containerStyle={{}}*/}
-                {/*    style={{backgroundColor: INDIGO}}*/}
-                {/*    position="bottomRight"*/}
-                {/*    onPress={this.onOpenChatClick}*/}
-                {/*>*/}
-                {/*    <Icon type="MaterialCommunityIcons" name="pen"/>*/}
-                {/*</Fab>*/}
             </View>
         );
     }

@@ -79,7 +79,15 @@
   "settings": {
     "title": "Settings",
     "buttons": {
-      "changeLanguageTittle": "Select language:"
+      "changeLanguageTittle": "Select language:",
+      "saveChanges": "Save changes"
+    },
+    "fields": {
+      "selectPreferredTopics": "Select preferred topics:",
+      "selectLanguageLevel": "Select your language level:"
+    },
+    "text": {
+      "saveChangesDisabled": "Settings is temporarily unavailable"
     }
   },
   "chatsList": {
