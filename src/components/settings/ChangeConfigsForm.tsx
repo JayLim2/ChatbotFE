@@ -43,7 +43,7 @@ class ChangeConfigsForm extends Component<any, any> {
                 items: [],
                 selected: []
             },
-            languageLevels: {
+            languageLevel: {
                 loading: false,
                 items: [],
                 selected: []
@@ -53,10 +53,12 @@ class ChangeConfigsForm extends Component<any, any> {
         this.onLoadLanguageLevels = this.onLoadLanguageLevels.bind(this);
         this.onSelectTopic = this.onSelectTopic.bind(this);
         this.onSaveChanges = this.onSaveChanges.bind(this);
+        this.onSelectLanguageLevel = this.onSelectLanguageLevel.bind(this);
     }
 
     componentDidMount() {
         this.onLoadTopics();
+        this.onLoadLanguageLevels();
     }
 
     onLoadTopics() {
@@ -72,7 +74,9 @@ class ChangeConfigsForm extends Component<any, any> {
                 this.setState({
                     topics: {
                         loading: false,
-                        items: topics,
+                        items: topics.map(topic => {
+                            return {id: topic.id, item: topic.name}
+                        }),
                         selected: []
                     }
                 });
@@ -89,7 +93,21 @@ class ChangeConfigsForm extends Component<any, any> {
     }
 
     onLoadLanguageLevels() {
-
+        const levels = ["Elementary", "Beginner", "Pre-Intermediate", "Intermediate", "Upper-Intermediate", "Native"];
+        const items: any[] = [];
+        for (let i = 0; i < levels.length; i++) {
+            items.push({
+                id: i,
+                item: levels[i]
+            });
+        }
+        this.setState({
+            languageLevel: {
+                loading: false,
+                items: items,
+                selected: []
+            }
+        })
     }
 
     onSelectTopic(item: any) {
@@ -104,10 +122,10 @@ class ChangeConfigsForm extends Component<any, any> {
 
     onSelectLanguageLevel(item: any) {
         this.setState({
-            languageLevels: {
-                loading: this.state.languageLevels.loading,
-                items: this.state.languageLevels.items,
-                selected: xorBy(this.state.languageLevels.selected, [item], 'id')
+            languageLevel: {
+                loading: this.state.languageLevel.loading,
+                items: this.state.languageLevel.items,
+                selected: item
             }
         })
     }
@@ -117,10 +135,8 @@ class ChangeConfigsForm extends Component<any, any> {
     }
 
     render() {
-        const {topics, languageLevels} = this.state;
+        const {topics, languageLevel} = this.state;
         const {t} = this.props;
-
-        const saveButtonDisabled = topics.items.length === 0 || languageLevels.items.length === 0;
 
         const loader: ReactNode = (
             <MaterialIndicator
@@ -131,7 +147,8 @@ class ChangeConfigsForm extends Component<any, any> {
 
         const selectPreferredTopicsNode = topics.loading ?
             loader :
-            <View style={Object.assign({}, ChangeConfigsForm.controlStyles.common, ChangeConfigsForm.controlStyles.selectContainer)}>
+            <View
+                style={Object.assign({}, ChangeConfigsForm.controlStyles.common, ChangeConfigsForm.controlStyles.selectContainer)}>
                 <SelectBox
                     label={t("settings:fields.selectPreferredTopics")}
                     inputPlaceholder={null}
@@ -150,27 +167,28 @@ class ChangeConfigsForm extends Component<any, any> {
                 />
             </View>;
 
-        const selectLanguageLevelNode = languageLevels.loading ?
+        const selectLanguageLevelNode = languageLevel.loading ?
             loader :
-            <View style={Object.assign({}, ChangeConfigsForm.controlStyles.common, ChangeConfigsForm.controlStyles.selectContainer)}>
+            <View
+                style={Object.assign({}, ChangeConfigsForm.controlStyles.common, ChangeConfigsForm.controlStyles.selectContainer)}>
                 <SelectBox
                     label={t("settings:fields.selectLanguageLevel")}
                     inputPlaceholder={null}
                     inputFilterContainerStyle={ChangeConfigsForm.controlStyles.inputFilterContainerStyle}
                     labelStyle={ChangeConfigsForm.controlStyles.labelStyle}
-                    multiOptionContainerStyle={ChangeConfigsForm.controlStyles.multiOptionContainerStyle}
                     containerStyle={ChangeConfigsForm.controlStyles.containerStyle}
                     arrowIconColor={INDIGO}
                     toggleIconColor={INDIGO}
                     searchIconColor={INDIGO}
-                    options={languageLevels.items}
-                    selectedValues={languageLevels.selected}
-                    onMultiSelect={this.onSelectLanguageLevel}
-                    onTapClose={this.onSelectLanguageLevel}
-                    isMulti
+                    options={languageLevel.items}
+                    value={languageLevel.selected}
+                    onChange={this.onSelectLanguageLevel}
                 />
             </View>;
 
+        const noItems: boolean = topics.items.length === 0 || languageLevel.items.length === 0;
+        const noSelectedItems: boolean = topics.selected.length === 0 || !languageLevel.selected;
+        const saveButtonDisabled: boolean = noItems || noSelectedItems;
         const buttonStyles = saveButtonDisabled ? {backgroundColor: "#ccc"} : {backgroundColor: INDIGO};
 
         //TODO add locale to loading!
@@ -187,7 +205,7 @@ class ChangeConfigsForm extends Component<any, any> {
                     >
                         <Text>{t("settings:buttons.saveChanges")}</Text>
                     </Button>
-                    {saveButtonDisabled ?
+                    {noItems ?
                         <Text style={{
                             fontSize: 12,
                             color: "gray",
