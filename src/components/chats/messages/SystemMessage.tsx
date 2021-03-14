@@ -29,7 +29,7 @@ class SystemMessage extends Component<any, any> {
         }
     })
 
-    constructor(props: Message) {
+    constructor(props: any) {
         super(props);
     }
 

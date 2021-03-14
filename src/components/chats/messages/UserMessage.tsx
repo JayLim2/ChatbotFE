@@ -1,7 +1,8 @@
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {Message} from "./Message";
 import {INDIGO, WHITE} from "../../../configuration/Constants";
+import {Message} from "../../../models/Message";
+import {AdviceResolver} from "../../utils/AdviceResolver";
 
 class UserMessage extends Component<any, any> {
 
@@ -27,17 +28,19 @@ class UserMessage extends Component<any, any> {
         }
     });
 
-    constructor(props: Message) {
+    constructor(props: any) {
         super(props);
     }
 
     render(): React.ReactNode {
-        const {message, date} = this.props;
+        const {message, date, advices} = this.props;
+
+        const resolvedAdvices: ReactNode = AdviceResolver.resolveAll(advices);
 
         return (
             <View style={UserMessage.styles.root}>
                 <View style={UserMessage.styles.messageContainer}>
-                    <Text style={UserMessage.styles.messageText}>{message}</Text>
+                    {resolvedAdvices}
                 </View>
                 <Text style={{
                     color:"indigo",

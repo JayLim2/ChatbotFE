@@ -64,6 +64,7 @@ class CurrentChat extends React.Component<any, any> {
                                      message={message.message}
                                      date={message.dateTime}
                                      userName={message.user?.login}
+                                     advices={message.advices}
                         />
                 );
             }
