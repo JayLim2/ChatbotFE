@@ -3,7 +3,7 @@ import {StyleSheet, View} from "react-native";
 import {withTranslation} from "react-i18next";
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy} from 'lodash'
-import {BLACK, INDIGO} from "../../configuration/Constants";
+import {BLACK, GRAY, INDIGO} from "../../configuration/Constants";
 import {getCurrentUserConfig, getTopics, saveCurrentUserConfig} from "../client/Client";
 import {Topic} from "../../models/Topic";
 import {ErrorResponse} from "../../models/HttpError";
@@ -33,6 +33,12 @@ class ChangeConfigsForm extends Component<any, any> {
         },
         containerStyle: {
             borderBottomColor: INDIGO
+        },
+        saveChangesDisabledHint: {
+            fontSize: 12,
+            color: GRAY,
+            textAlign: "center",
+            paddingVertical: 5
         }
     });
 
@@ -258,12 +264,7 @@ class ChangeConfigsForm extends Component<any, any> {
                         <Text>{t("settings:buttons.saveChanges")}</Text>
                     </Button>
                     {noItems ?
-                        <Text style={{
-                            fontSize: 12,
-                            color: "gray",
-                            textAlign: "center",
-                            paddingVertical: 5
-                        }}>
+                        <Text style={ChangeConfigsForm.controlStyles.saveChangesDisabledHint}>
                             {t("settings:text.saveChangesDisabled")}
                         </Text> :
                         null}

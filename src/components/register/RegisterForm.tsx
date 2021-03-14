@@ -34,6 +34,21 @@ class RegisterForm extends Component<any, any> {
         }
     });
 
+    static icons = {
+        loginIcon: {
+            type: 'font-awesome',
+            name: 'user'
+        },
+        passwordIcon: {
+            type: 'material',
+            name: 'lock'
+        },
+        emailIcon: {
+            type: 'material',
+            name: 'email'
+        }
+    }
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -128,6 +143,7 @@ class RegisterForm extends Component<any, any> {
         //Get authentication result message
         let message: ReactNode = null;
         if (!registerInProgress && registerResponse) {
+            //TODO duplicated in LoginForm and RegisterForm
             const statusAlias = ErrorHandling.getStatusAlias(registerResponse.status);
             const isCustomStatus: boolean = statusAlias === "custom";
             const pathToComponent = isCustomStatus ? "register" : "common";
@@ -145,36 +161,24 @@ class RegisterForm extends Component<any, any> {
                     !registerInProgress &&
                     <View style={RegisterForm.styles.container}>
                         <Text>{t("register:fields.login.label")}</Text>
-                        <Input leftIcon={{
-                            type: 'font-awesome',
-                            name: 'user'
-                        }}
+                        <Input leftIcon={RegisterForm.icons.loginIcon}
                                onChangeText={this.onInputLogin}
                                defaultValue={this.state.login}
                         />
                         <Text>{t("register:fields.password.label")}</Text>
-                        <Input leftIcon={{
-                            type: 'material',
-                            name: 'lock'
-                        }}
+                        <Input leftIcon={RegisterForm.icons.passwordIcon}
                                secureTextEntry={true}
                                onChangeText={this.onInputPassword}
                                defaultValue={this.state.password}
                         />
                         <Text>{t("register:fields.repeatPassword.label")}</Text>
-                        <Input leftIcon={{
-                            type: 'material',
-                            name: 'lock'
-                        }}
+                        <Input leftIcon={RegisterForm.icons.passwordIcon}
                                secureTextEntry={true}
                                onChangeText={this.onInputRepeatPassword}
                                defaultValue={this.state.repeatPassword}
                         />
                         <Text>{t("register:fields.email.label")}</Text>
-                        <Input leftIcon={{
-                            type: 'material',
-                            name: 'email'
-                        }}
+                        <Input leftIcon={RegisterForm.icons.emailIcon}
                                onChangeText={this.onInputEmail}
                                defaultValue={this.state.email}
                         />

@@ -1,6 +1,3 @@
-//Messages
-export const NO_CONNECTION = "No connection.";
-
 //Routes names
 export const SPLASH_SCREEN = "SplashScreen";
 export const LOGIN_ACTIVITY = "Login";
@@ -14,3 +11,4 @@ export const SETTINGS_ACTIVITY = "Settings";
 export const INDIGO = "indigo";
 export const BLACK = "#000";
 export const WHITE = "#FFF";
+export const GRAY = "gray";

@@ -35,8 +35,18 @@ class ForgetPasswordForm extends Component<any, any> {
             textAlignVertical: "center",
             justifyContent: "center",
             padding: 15
+        },
+        resetPasswordButton: {
+            backgroundColor: INDIGO
         }
     });
+
+    static icons = {
+        emailIcon: {
+            type: 'material',
+            name: 'email'
+        }
+    }
 
     constructor(props: any) {
         super(props);
@@ -86,15 +96,12 @@ class ForgetPasswordForm extends Component<any, any> {
                     !resetInProgress &&
                     <View style={ForgetPasswordForm.styles.container}>
                         <Text>{t("forgetPassword:fields.email.label")}</Text>
-                        <Input leftIcon={{
-                            type: 'material',
-                            name: 'email'
-                        }}
+                        <Input leftIcon={ForgetPasswordForm.icons.emailIcon}
                                onChangeText={this.onInputEmail}
                         />
                         <Button full
                                 onPress={this.onResetPassword}
-                                style={{backgroundColor: INDIGO}}
+                                style={ForgetPasswordForm.styles.resetPasswordButton}
                         >
                             <Text>{t("forgetPassword:buttons.resetButton")}</Text>
                         </Button>

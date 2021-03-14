@@ -99,9 +99,7 @@ class SettingsActivity extends Component<any, any> {
                             </Button>
                         </View>
                     </View>
-                    <View style={{
-                        padding: 20
-                    }}>
+                    <View style={{padding: 20}}>
                         <ChangeConfigsForm navigation={this.props.navigation} />
                     </View>
                 </Content>

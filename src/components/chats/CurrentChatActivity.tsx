@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import CurrentChat from "./CurrentChat";
 import {StyleSheet} from 'react-native';
-import {Body, Button, Container, Content, Footer, Header, Icon, Left, Right, Title, View} from 'native-base';
+import {Button, Container, Content, Footer, Icon, View} from 'native-base';
 import {INDIGO, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {Input} from "react-native-elements";
 import {fetchFonts} from "../../configuration/Fonts";

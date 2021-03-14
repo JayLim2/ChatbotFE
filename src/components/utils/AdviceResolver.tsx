@@ -19,61 +19,61 @@ export class AdviceResolver {
         const message = String(advice.message?.message);
 
         if (mistakeType === "CUSTOM") {
-
+            //TODO
         } else {
-            let text: MarkedString[] = AdviceResolver.splitByStartAndEndPositions(
-                message,
-                startPosition,
-                endPosition
-            );
-            let textNodes: ReactNode[] = [];
-            let k = 0;
-            for (let part of text) {
-                let style: any = {};
-                if (part.isHighlighted) {
-                    switch (adviceType) {
-                        case "ERROR":
-                            style.backgroundColor = "#ffbebe";
-                            style.color = "#b32323";
-                            break;
-                        case "WARN":
-                            style.backgroundColor = "#ffd500";
-                            style.color = "#584700";
-                            break;
-                        case "INFO":
-                            style.backgroundColor = "#befff0";
-                            style.color = "#233bb3";
-                            break;
-                    }
-                } else {
-                    style.color = "#fff";
-                }
-                const f = () => {
-                    alert(advice.comment)
-                };
-                const currentTextNode = (
-                    <Text key={`marked-text-part-${++k}`}
-                          style={style}
-                    >
-                        {part.value}
-                    </Text>
-                );
-                textNodes.push(
-                    part.isHighlighted ?
-                        <View onTouchEnd={f}>
-                            {currentTextNode}
-                        </View> :
-                        currentTextNode
-                );
-            }
-            return (
-                <View style={{flexDirection: "row"}}>
-                    {textNodes}
-                </View>
-            );
+            //TODO
         }
 
-        return null;
+        let text: MarkedString[] = AdviceResolver.splitByStartAndEndPositions(
+            message,
+            startPosition,
+            endPosition
+        );
+        let textNodes: ReactNode[] = [];
+        let k = 0;
+        for (let part of text) {
+            let style: any = {};
+            if (part.isHighlighted) {
+                switch (adviceType) {
+                    case "ERROR":
+                        style.backgroundColor = "#ffbebe";
+                        style.color = "#b32323";
+                        break;
+                    case "WARN":
+                        style.backgroundColor = "#ffd500";
+                        style.color = "#584700";
+                        break;
+                    case "INFO":
+                        style.backgroundColor = "#befff0";
+                        style.color = "#233bb3";
+                        break;
+                }
+            } else {
+                style.color = "#fff";
+            }
+            const f = () => {
+                alert(advice.comment)
+            };
+            const currentTextNode = (
+                <Text key={`marked-text-part-${++k}`}
+                      style={style}
+                >
+                    {part.value}
+                </Text>
+            );
+            textNodes.push(
+                part.isHighlighted ?
+                    <View onTouchEnd={f}>
+                        {currentTextNode}
+                    </View> :
+                    currentTextNode
+            );
+        }
+        return (
+            <View style={{flexDirection: "row"}}>
+                {textNodes}
+            </View>
+        );
     }
 
     private static splitByStartAndEndPositions(string: string, start: number, end: number): MarkedString[] {

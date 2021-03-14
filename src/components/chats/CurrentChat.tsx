@@ -1,13 +1,30 @@
 import React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import SystemMessage from "./messages/SystemMessage";
 import UserMessage from "./messages/UserMessage";
 import {WithTranslation, withTranslation} from "react-i18next";
 import {ChatProps} from "./ChatProps";
 import {LocalStorage} from "../utils/Storage";
 import {Message} from "../../models/Message";
+import {GRAY} from "../../configuration/Constants";
 
 class CurrentChat extends React.Component<any, any> {
+
+    static styles = StyleSheet.create({
+        scrollView: {
+            paddingVertical: 10
+        },
+        emptyChatPlaceholderContainer: {
+            alignItems: "center",
+            paddingTop: "75%",
+            paddingBottom: "75%"
+        },
+        emptyChatPlaceholder: {
+            fontSize: 18,
+            color: GRAY,
+            textAlign: "center"
+        }
+    })
 
     //References to components
     private scrollView: ScrollView | null = null;
@@ -73,20 +90,12 @@ class CurrentChat extends React.Component<any, any> {
         return (
             <ScrollView
                 ref={ref => this.scrollView = ref}
-                style={{paddingVertical: 10}}
+                style={CurrentChat.styles.scrollView}
             >
                 {messagesItems.length > 0 ?
                     messagesItems :
-                    <View style={{
-                        alignItems: "center",
-                        paddingTop: "75%",
-                        paddingBottom: "75%"
-                    }}>
-                        <Text style={{
-                            fontSize: 18,
-                            color: "gray",
-                            textAlign: "center"
-                        }}>
+                    <View style={CurrentChat.styles.emptyChatPlaceholderContainer}>
+                        <Text style={CurrentChat.styles.emptyChatPlaceholder}>
                             {t("chat:noMessagesPrompt")}
                         </Text>
                     </View>

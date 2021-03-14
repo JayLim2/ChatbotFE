@@ -25,6 +25,11 @@ class UserMessage extends Component<any, any> {
         messageText: {
             color: WHITE,
             textAlign: "right"
+        },
+        additionalInfoDateTime: {
+            color: INDIGO,
+            paddingRight: 20,
+            fontSize: 11
         }
     });
 
@@ -35,18 +40,20 @@ class UserMessage extends Component<any, any> {
     render(): React.ReactNode {
         const {message, date, advices} = this.props;
 
-        const resolvedAdvices: ReactNode = AdviceResolver.resolveAll(advices);
+        const messageWithResolvedAdvices: ReactNode = advices.length > 0 ?
+            AdviceResolver.resolveAll(advices) :
+            (
+                <Text>
+                    {message}
+                </Text>
+            );
 
         return (
             <View style={UserMessage.styles.root}>
                 <View style={UserMessage.styles.messageContainer}>
-                    {resolvedAdvices}
+                    {messageWithResolvedAdvices}
                 </View>
-                <Text style={{
-                    color:"indigo",
-                    paddingRight:20,
-                    fontSize:11
-                }}>
+                <Text style={UserMessage.styles.additionalInfoDateTime}>
                     {date}
                 </Text>
             </View>

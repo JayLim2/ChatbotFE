@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Body, Button, Container, Content, Header, Icon, Right, Title} from 'native-base';
+import {Container, Content} from 'native-base';
 import ChatsList from "./ChatsList";
-import {INDIGO, LOGIN_ACTIVITY, SETTINGS_ACTIVITY} from "../../configuration/Constants";
 import {fetchFonts} from "../../configuration/Fonts";
-import i18n from "assets/i18nx";
 import {withTranslation} from "react-i18next";
-import {LocalStorage} from "../utils/Storage";
 import ActivityHeader from "../common/ActivityHeader";
 
 const ChatsActivity = ({navigation}) => {

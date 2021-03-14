@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ReactNode} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'native-base';
 import {Input} from 'react-native-elements';
@@ -16,6 +16,7 @@ import {tryLogin} from "../client/Client";
 import {withTranslation} from "react-i18next";
 import {HttpError} from "../../models/HttpError";
 import {User} from "../../models/User";
+import {ErrorHandling} from "../utils/ErrorHandlingConfigs";
 
 const statusNames: Map<number, string> = new Map();
 statusNames.set(-1, "unknown");
@@ -58,8 +59,35 @@ class LoginForm extends Component<any, any> {
             textAlignVertical: "center",
             justifyContent: "center",
             padding: 15
+        },
+        registerButton: {
+            backgroundColor: WHITE,
+            borderColor: INDIGO,
+            borderWidth: 2,
+            marginTop: 10
+        },
+        registerButtonText: {
+            color: INDIGO
+        },
+        forgetPasswordLink: {
+            marginTop: 20,
+            color: INDIGO,
+            fontSize: 14,
+            textDecorationLine: "underline",
+            textAlign: "center"
         }
     });
+
+    static icons = {
+        loginIcon: {
+            type: 'font-awesome',
+            name: 'user'
+        },
+        passwordIcon: {
+            type: 'material',
+            name: 'lock'
+        }
+    }
 
     constructor({props}: { props: any }) {
         super(props);
@@ -175,7 +203,7 @@ class LoginForm extends Component<any, any> {
         }
 
         const authenticating: boolean = this.state.authenticating;
-        const authResponse: HttpResponse = this.state.authResponse;
+        const authResponse: any = this.state.authResponse;
 
         const {t} = this.props;
 
@@ -184,11 +212,14 @@ class LoginForm extends Component<any, any> {
             <MaterialIndicator color={INDIGO}/> : null;
 
         //Get authentication result message
-        let message = null;
+        let message: ReactNode = null;
         if (!authenticating && authResponse) {
-            const statusCode = authResponse.status !== undefined ? authResponse.status : -1;
-            const pathToMessage = statusNames.get(statusCode);
-            message = <ErrorMessage message={t(`login:messages.${pathToMessage}`)}/>;
+            //TODO duplicated in LoginForm and RegisterForm
+            const statusAlias = ErrorHandling.getStatusAlias(authResponse.status);
+            const isCustomStatus: boolean = statusAlias === "custom";
+            const pathToComponent = isCustomStatus ? "register" : "common";
+            const pathToMessage = isCustomStatus ? authResponse.message : statusAlias;
+            message = <ErrorMessage message={t(`${pathToComponent}:messages.${pathToMessage}`)}/>;
         }
 
         //Render
@@ -203,18 +234,12 @@ class LoginForm extends Component<any, any> {
                     <View style={LoginForm.styles.container}>
                         <Text>{t("login:fields.login.label")}</Text>
                         <Input placeholder={t("login:fields.login.placeholder")}
-                               leftIcon={{
-                                   type: 'font-awesome',
-                                   name: 'user'
-                               }}
+                               leftIcon={LoginForm.icons.loginIcon}
                                onChangeText={this.onInputLogin}
                         />
                         <Text>{t("login:fields.password.label")}</Text>
                         <Input placeholder={t("login:fields.password.placeholder")}
-                               leftIcon={{
-                                   type: 'font-awesome',
-                                   name: 'lock'
-                               }}
+                               leftIcon={LoginForm.icons.passwordIcon}
                                secureTextEntry={true}
                                onChangeText={this.onInputPassword}
                         />
@@ -224,24 +249,13 @@ class LoginForm extends Component<any, any> {
                             <Text>{t("login:buttons.signIn")}</Text>
                         </Button>
                         <Button full onPress={this.onRegister}
-                                style={{
-                                    backgroundColor: WHITE,
-                                    borderColor: INDIGO,
-                                    borderWidth: 2,
-                                    marginTop: 10
-                                }}
+                                style={LoginForm.styles.registerButton}
                         >
-                            <Text style={{color: INDIGO}}>
+                            <Text style={LoginForm.styles.registerButtonText}>
                                 {t("login:buttons.register")}
                             </Text>
                         </Button>
-                        <Text style={{
-                            marginTop: 20,
-                            color: INDIGO,
-                            fontSize: 14,
-                            textDecorationLine: "underline",
-                            textAlign: "center"
-                        }}
+                        <Text style={LoginForm.styles.forgetPasswordLink}
                               onPress={this.onForgetPassword}
                         >
                             {t("login:buttons.forgetPassword")}

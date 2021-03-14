@@ -1,5 +1,6 @@
 {
   "common": {
+    "systemUsername": "Бендер",
     "messages": {
       "wait": "Ждите...",
       "unknown": "Неизвестная ошибка",
