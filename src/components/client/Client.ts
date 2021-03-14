@@ -5,7 +5,7 @@
  * @return true - credentials are valid, false - else
  */
 import {
-    CHATS_API_LINK,
+    CHATS_API_LINK, CONFIGS_API_LINK,
     HEALTH_CHECK_API_LINK,
     MESSAGES_API_LINK, TOPICS_API_LINK,
     USERS_API_LINK
@@ -18,6 +18,7 @@ import {Chat} from "../../models/Chat";
 import {LocalStorage} from "../utils/Storage";
 import {User} from "../../models/User";
 import {Topic} from "../../models/Topic";
+import {ProfileConfiguration} from "../../models/ProfileConfiguration";
 
 const getAuthorizationToken = (login: string, password: string) => {
     return encode(`${login}:${password}`);
@@ -221,6 +222,94 @@ export const getTopics = async () => {
         return handleResponse(response, url);
     }).then((topics: Topic[]) => {
         return topics;
+    }).catch((error: any) => {
+        throw handleError(error);
+    })
+}
+
+export const getCurrentUserConfig = async () => {
+    const url = `${CONFIGS_API_LINK}/get/user`;
+    const token = await LocalStorage.getData("token");
+    const userId = await LocalStorage.getData("userId");
+
+    let user: User = new User();
+    user.id = Number(userId);
+
+    return fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${token}`
+            },
+            body: JSON.stringify(user)
+        }
+    ).then((response: Response) => {
+        return handleResponse(response, url);
+    }).then((config: ProfileConfiguration) => {
+        return config;
+    }).catch((error: any) => {
+        throw handleError(error);
+    })
+}
+
+export const saveCurrentUserConfig = async (topics: Topic[], langLevel: any, currentConfigId?: number) => {
+    const url = `${CONFIGS_API_LINK}/save`;
+    const token = await LocalStorage.getData("token");
+    const userId = await LocalStorage.getData("userId");
+
+    let user: User = new User();
+    user.id = Number(userId);
+
+    let config: ProfileConfiguration = new ProfileConfiguration();
+    if (currentConfigId) {
+        config.id = currentConfigId;
+    }
+    config.preferredTopics = topics;
+    config.owner = user;
+    config.languageSkillsConfig = {
+        selectedLanguageLevel: langLevel,
+        settings: {}
+    }
+
+    return fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${token}`
+            },
+            body: JSON.stringify(config)
+        }
+    ).then((response: Response) => {
+        return handleResponse(response, url);
+    }).then((config: ProfileConfiguration) => {
+        return config;
+    }).catch((error: any) => {
+        throw handleError(error);
+    })
+}
+
+export const logout = async () => {
+    const url = `${USERS_API_LINK}/logout`;
+    const token = await LocalStorage.getData("token");
+    const userId = await LocalStorage.getData("userId");
+
+    return fetch(
+        url,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${token}`
+            }
+        }
+    ).then((response: Response) => {
+        return handleResponse(response, url, true);
+    }).then(() => {
+        return;
     }).catch((error: any) => {
         throw handleError(error);
     })

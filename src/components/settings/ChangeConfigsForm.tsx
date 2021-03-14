@@ -4,11 +4,12 @@ import {withTranslation} from "react-i18next";
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy} from 'lodash'
 import {BLACK, INDIGO} from "../../configuration/Constants";
-import {getTopics} from "../client/Client";
+import {getCurrentUserConfig, getTopics, saveCurrentUserConfig} from "../client/Client";
 import {Topic} from "../../models/Topic";
 import {ErrorResponse} from "../../models/HttpError";
 import {MaterialIndicator} from "react-native-indicators";
 import {Button, Text} from "native-base";
+import {ProfileConfiguration} from "../../models/ProfileConfiguration";
 
 class ChangeConfigsForm extends Component<any, any> {
 
@@ -54,11 +55,13 @@ class ChangeConfigsForm extends Component<any, any> {
         this.onSelectTopic = this.onSelectTopic.bind(this);
         this.onSaveChanges = this.onSaveChanges.bind(this);
         this.onSelectLanguageLevel = this.onSelectLanguageLevel.bind(this);
+        this.onLoadConfig = this.onLoadConfig.bind(this);
     }
 
-    componentDidMount() {
-        this.onLoadTopics();
+    async componentDidMount() {
+        await this.onLoadTopics();
         this.onLoadLanguageLevels();
+        this.onLoadConfig();
     }
 
     onLoadTopics() {
@@ -69,7 +72,7 @@ class ChangeConfigsForm extends Component<any, any> {
                 selected: []
             }
         });
-        getTopics()
+        return getTopics()
             .then((topics: Topic[]) => {
                 this.setState({
                     topics: {
@@ -130,8 +133,57 @@ class ChangeConfigsForm extends Component<any, any> {
         })
     }
 
-    onSaveChanges() {
+    onLoadConfig() {
+        getCurrentUserConfig()
+            .then((config: ProfileConfiguration) => {
+                this.setState({config});
+                let selectedTopics: any[] = [];
+                if (config.preferredTopics) {
+                    for (const topic of config.preferredTopics) {
+                        selectedTopics.push({id: topic.id, item: topic.name});
+                    }
+                    this.setState({
+                        topics: {
+                            loading: this.state.topics.loading,
+                            items: this.state.topics.items,
+                            selected: selectedTopics
+                        }
+                    });
+                }
+                if (config.languageSkillsConfig && config.languageSkillsConfig.selectedLanguageLevel) {
+                    this.setState({
+                       languageLevel: {
+                           loading: this.state.languageLevel.loading,
+                           items: this.state.languageLevel.items,
+                           selected: config.languageSkillsConfig.selectedLanguageLevel
+                       }
+                    });
+                }
+            })
+            .catch((error: ErrorResponse) => {
+                console.error("Can't load config: " + JSON.stringify(error));
+            });
+    }
 
+    onSaveChanges() {
+        const selectedTopics = this.state.topics.selected;
+        const selectedLanguageLevel = this.state.languageLevel.selected;
+        const currentConfig = this.state.config;
+
+        const topics: Topic[] = selectedTopics.map(item => {
+            let topic: Topic = new Topic();
+            topic.id = item.id;
+            topic.name = item.item;
+            return topic;
+        });
+
+        saveCurrentUserConfig(topics, selectedLanguageLevel, currentConfig.id)
+            .then((config: ProfileConfiguration) => {
+                this.setState({config});
+            })
+            .catch((error: ErrorResponse) => {
+                console.error(error);
+            });
     }
 
     render() {

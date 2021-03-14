@@ -3,6 +3,8 @@ import {Body, Button, Header, Icon, Left, Right, Title} from "native-base";
 import React from "react";
 import {LocalStorage} from "../utils/Storage";
 import {withTranslation} from "react-i18next";
+import {logout} from "../client/Client";
+import {ErrorResponse} from "../../models/HttpError";
 
 const ActivityHeader = ({navigation, name, t}: any) => {
 
@@ -15,8 +17,15 @@ const ActivityHeader = ({navigation, name, t}: any) => {
     };
 
     const onLogout = async () => {
-        await LocalStorage.clearData("token");
-        navigation.navigate(LOGIN_ACTIVITY);
+        logout()
+            .then(async () => {
+                await LocalStorage.clearData("token");
+                await LocalStorage.clearData("userId");
+                navigation.navigate(LOGIN_ACTIVITY);
+            })
+            .catch((error: ErrorResponse) => {
+                console.error(error);
+            })
     };
 
     const left: React.ReactNode[] = [];
