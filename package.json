@@ -13,7 +13,7 @@
     "expo-font": "^8.1.1",
     "expo-splash-screen": "0.9.0",
     "expo-updates": "0.4.2",
-    "i18next": "19.4.4",
+    "i18next": "26.3.4",
     "moment": "~2.26.0",
     "native-base": "~2.13.12",
     "npm-check-updates": "^11.2.1",
